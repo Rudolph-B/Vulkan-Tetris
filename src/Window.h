@@ -15,7 +15,10 @@ public:
     Window();
     ~Window();
 
-    GLFWwindow* window;
+    GLFWwindow* glfwWindow;
+
+    bool shouldClose();
+
 private:
 
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height);

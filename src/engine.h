@@ -107,22 +107,25 @@ private:
     VkDeviceMemory colorImageMemory;
     VkImageView colorImageView;
 
-    VkImage depthImage;
-    VkDeviceMemory depthImageMemory;
-    VkImageView depthImageView;
-
-    uint32_t mipLevels;
     VkImage textureImage;
     VkDeviceMemory textureImageMemory;
     VkImageView textureImageView;
     VkSampler textureSampler;
 
-    std::vector<Vertex> objVertices;
+    std::vector<tVertex> objVertices;
     std::vector<uint32_t> objIndices;
+
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
+    VkBuffer vertexStagingBuffer;
+    VkDeviceMemory vertexStagingBufferMemory;
+    VkDeviceSize vertexBufferSize = sizeof(std::vector<tVertex>) * 50;
+
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
+    VkBuffer indexStagingBuffer;
+    VkDeviceMemory indexStagingBufferMemory;
+    VkDeviceSize indexBufferSize = sizeof(std::vector<uint32_t>) * 50;
 
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
@@ -161,7 +164,6 @@ private:
     VkFormat findDepthFormat();
     static bool hasStencilComponent(VkFormat format);
     void createTextureImage();
-    void generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight);
     VkSampleCountFlagBits getMaxUsableSampleCount();
     void createTextureImageView();
     void createTextureSampler();
@@ -169,7 +171,7 @@ private:
     void createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
     void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
-    void loadModel();
+    bool loadModel();
     void createVertexBuffer();
     void createIndexBuffer();
     void createUniformBuffers();
@@ -197,6 +199,10 @@ private:
     bool checkValidationLayerSupport();
     static std::vector<char> readFile(const std::string& filename);
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
+
+    void copyVertexBuffer();
+
+    void copyIndexBuffer();
 };
 
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
