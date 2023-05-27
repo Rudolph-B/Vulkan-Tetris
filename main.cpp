@@ -4,31 +4,28 @@
 
 //<editor-fold desc="/* STANDARD INCLUDES */" defaultstate="collapsed">
 #include <iostream>
-#include <fstream>
 #include <stdexcept>
-#include <algorithm>
-#include <chrono>
-#include <vector>
-#include <cstring>
 #include <cstdlib>
-#include <cstdint>
-#include <limits>
-#include <array>
 #include <optional>
-#include <set>
-#include <unordered_map>
 //</editor-fold>
 
 //<editor-fold desc="/* GLOBAL CONSTANTS */" defaultstate="collapsed">
 /* WINDOW SIZE */
-const uint32_t WIDTH = 800;
-const uint32_t HEIGHT = 600;
+const int WIDTH = 800;
+const int HEIGHT = 600;
 
 /* MODEL AND TEXTURE PATHS */
 const std::string MODEL_PATH = "mdl/temp.obj";
 const std::string TEXTURE_PATH = "tex/temp.png";
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
+
+/* ENABLES/DISABLES VALIDATION LAYERS*/
+#ifdef NDEBUG
+const bool E_VALIDATION_LAYERS = false;
+#else
+const bool E_VALIDATION_LAYERS = true;
+#endif
 //</editor-fold>
 
 //<editor-fold desc="/* SOURCE INCLUDES */" defaultstate="collapsed">
