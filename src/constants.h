@@ -8,8 +8,8 @@
 #include <string>
 
 /* WINDOW SIZE */
-const int WIDTH = 800;
-const int HEIGHT = 600;
+const int WIDTH = 400;
+const int HEIGHT = 800;
 
 /* MODEL AND TEXTURE PATHS */
 const std::string MODEL_PATH = "mdl/temp.obj";

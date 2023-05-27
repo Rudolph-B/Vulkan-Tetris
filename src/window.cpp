@@ -5,10 +5,6 @@
 #include "window.h"
 #include "engine.h"
 
-/* WINDOW SIZE */
-extern const int WIDTH;
-extern const int HEIGHT;
-
 Window::Window() {
     glfwInit();
 
@@ -30,6 +26,6 @@ Window::~Window() {
     glfwTerminate();
 }
 
-bool Window::shouldClose() {
+bool Window::shouldClose() const {
     return glfwWindowShouldClose(glfwWindow);
 }

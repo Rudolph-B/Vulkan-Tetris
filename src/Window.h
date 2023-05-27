@@ -17,13 +17,12 @@ public:
 
     GLFWwindow* glfwWindow;
 
-    bool shouldClose();
+    bool shouldClose() const;
 
 private:
 
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
 };
-
 
 #endif //VULKAN_TETRIS_WINDOW_H

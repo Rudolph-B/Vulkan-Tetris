@@ -29,60 +29,6 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT
 Engine::Engine(Window *window) {
     this->window = window;
 
-    initVulkan();
-}
-
-Engine::~Engine() {
-    cleanupSwapChain();
-
-    vkDestroyPipeline(device, graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-    vkDestroyRenderPass(device, renderPass, nullptr);
-
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        vkDestroyBuffer(device, uniformBuffers[i], nullptr);
-        vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
-    }
-
-    vkDestroyDescriptorPool(device, descriptorPool, nullptr);
-
-    vkDestroySampler(device, textureSampler, nullptr);
-    vkDestroyImageView(device, textureImageView, nullptr);
-
-    vkDestroyImage(device, textureImage, nullptr);
-    vkFreeMemory(device, textureImageMemory, nullptr);
-
-    vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
-
-    vkDestroyBuffer(device, indexBuffer, nullptr);
-    vkFreeMemory(device, indexBufferMemory, nullptr);
-    vkDestroyBuffer(device, indexStagingBuffer, nullptr);
-    vkFreeMemory(device, indexStagingBufferMemory, nullptr);
-
-    vkDestroyBuffer(device, vertexBuffer, nullptr);
-    vkFreeMemory(device, vertexBufferMemory, nullptr);
-    vkDestroyBuffer(device, vertexStagingBuffer, nullptr);
-    vkFreeMemory(device, vertexStagingBufferMemory, nullptr);
-
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
-        vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
-        vkDestroyFence(device, inFlightFences[i], nullptr);
-    }
-
-    vkDestroyCommandPool(device, commandPool, nullptr);
-
-    vkDestroyDevice(device, nullptr);
-
-    if (E_VALIDATION_LAYERS) {
-        DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
-    }
-
-    vkDestroySurfaceKHR(instance, surface, nullptr);
-    vkDestroyInstance(instance, nullptr);
-}
-
-void Engine::initVulkan() {
     createInstance();
     setupDebugMessenger();
     createSurface();
@@ -108,7 +54,61 @@ void Engine::initVulkan() {
     createSyncObjects();
 }
 
+Engine::~Engine() {
+    cleanupSwapChain();
 
+    vkDestroyPipeline(device, graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+    vkDestroyRenderPass(device, renderPass, nullptr);
+
+    //<editor-fold desc="/* CLEAN UNIFORM BUFFERS */" defaultstate="collapsed">
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroyBuffer(device, uniformBuffers[i], nullptr);
+        vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
+    }
+    //</editor-fold>
+
+    vkDestroyDescriptorPool(device, descriptorPool, nullptr);
+
+    vkDestroySampler(device, textureSampler, nullptr);
+    vkDestroyImageView(device, textureImageView, nullptr);
+
+    vkDestroyImage(device, textureImage, nullptr);
+    vkFreeMemory(device, textureImageMemory, nullptr);
+
+    vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
+
+    //<editor-fold desc="/* CLEAN INDEX BUFFERS */" defaultstate="collapsed">
+    vkDestroyBuffer(device, indexBuffer, nullptr);
+    vkFreeMemory(device, indexBufferMemory, nullptr);
+    vkDestroyBuffer(device, indexStagingBuffer, nullptr);
+    vkFreeMemory(device, indexStagingBufferMemory, nullptr);
+    //</editor-fold>
+
+    //<editor-fold desc="/* CLEAN VERTEX BUFFERS */" defaultstate="collapsed">
+    vkDestroyBuffer(device, vertexBuffer, nullptr);
+    vkFreeMemory(device, vertexBufferMemory, nullptr);
+    vkDestroyBuffer(device, vertexStagingBuffer, nullptr);
+    vkFreeMemory(device, vertexStagingBufferMemory, nullptr);
+    //</editor-fold>
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(device, inFlightFences[i], nullptr);
+    }
+
+    vkDestroyCommandPool(device, commandPool, nullptr);
+
+    vkDestroyDevice(device, nullptr);
+
+    if (E_VALIDATION_LAYERS) {
+        DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+    }
+
+    vkDestroySurfaceKHR(instance, surface, nullptr);
+    vkDestroyInstance(instance, nullptr);
+}
 
 void Engine::cleanupSwapChain() {
     vkDestroyImageView(device, colorImageView, nullptr);
@@ -151,7 +151,7 @@ void Engine::createInstance() {
 
     VkApplicationInfo appInfo{};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Hello Triangle";
+    appInfo.pApplicationName = "Vulkan-Tetris";
     appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     appInfo.pEngineName = "No Engine";
     appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -421,9 +421,11 @@ void Engine::createDescriptorSetLayout() {
 }
 
 void Engine::createGraphicsPipeline() {
+    /* LOAD SHADERS */
     auto vertShaderCode = readFile("shd/base.vert.spv");
     auto fragShaderCode = readFile("shd/base.frag.spv");
 
+    /* CREATE SHADER MODULES */
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
 
@@ -444,8 +446,8 @@ void Engine::createGraphicsPipeline() {
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-    auto bindingDescription = tVertex::getBindingDescription();
-    auto attributeDescriptions = tVertex::getAttributeDescriptions();
+    auto bindingDescription = Vertex::getBindingDescription();
+    auto attributeDescriptions = Vertex::getAttributeDescriptions();
 
     vertexInputInfo.vertexBindingDescriptionCount = 1;
     vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
@@ -501,8 +503,8 @@ void Engine::createGraphicsPipeline() {
     colorBlending.blendConstants[3] = 0.0f;
 
     std::vector<VkDynamicState> dynamicStates = {
-            VK_DYNAMIC_STATE_VIEWPORT,
-            VK_DYNAMIC_STATE_SCISSOR
+        VK_DYNAMIC_STATE_VIEWPORT,
+        VK_DYNAMIC_STATE_SCISSOR
     };
     VkPipelineDynamicStateCreateInfo dynamicState{};
     dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -587,62 +589,44 @@ void Engine::createColorResources() {
     colorImageView = createImageView(colorImage, colorFormat, VK_IMAGE_ASPECT_COLOR_BIT);
 }
 
-VkFormat Engine::findSupportedFormat(const std::vector<VkFormat> &candidates, VkImageTiling tiling,
-                                     VkFormatFeatureFlags features) {
-    for (VkFormat format : candidates) {
-        VkFormatProperties props;
-        vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &props);
-
-        if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
-            return format;
-        } else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
-            return format;
-        }
-    }
-
-    throw std::runtime_error("failed to find supported format!");
-}
-
-VkFormat Engine::findDepthFormat() {
-    return findSupportedFormat(
-            {VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
-            VK_IMAGE_TILING_OPTIMAL,
-            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-    );
-}
-
-bool Engine::hasStencilComponent(VkFormat format) {
-    return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
-}
-
 void Engine::createTextureImage() {
+    /* LOAD TEXTURE IMAGE */
     int texWidth, texHeight, texChannels;
     stbi_uc* pixels = stbi_load(TEXTURE_PATH.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize imageSize = texWidth * texHeight * 4;
 
+    /* CHECK IF TEXTURE IMAGE LOADED */
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");
     }
 
+    /* CREATE STAGING BUFFER */
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
     createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
+    /* COPY RAW PIXELS TO STAGING BUFFER */
     void* data;
     vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
     memcpy(data, pixels, static_cast<size_t>(imageSize));
     vkUnmapMemory(device, stagingBufferMemory);
 
+    /* FREE RAW PIXELS */
     stbi_image_free(pixels);
 
+    /* CREATE ACTUAL BUFFER */
     createImage(texWidth, texHeight, VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
 
-    transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    /* COPY TEXTURE FROM STAGING BUFFER TO ACTUAL BUFFER */
+    transitionImageLayout(textureImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
-    transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    transitionImageLayout(textureImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
+    /* DESTROY STAGING BUFFER */
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);
+
+
 }
 
 VkSampleCountFlagBits Engine::getMaxUsableSampleCount() {
@@ -711,9 +695,10 @@ VkImageView Engine::createImageView(VkImage image, VkFormat format, VkImageAspec
     return imageView;
 }
 
-void Engine::createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples,
-                         VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
-                         VkMemoryPropertyFlags properties, VkImage &image, VkDeviceMemory &imageMemory) {
+void Engine::createImage(
+    uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling,
+    VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage &image, VkDeviceMemory &imageMemory
+) {
     VkImageCreateInfo imageInfo{};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -748,7 +733,7 @@ void Engine::createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits 
     vkBindImageMemory(device, image, imageMemory, 0);
 }
 
-void Engine::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
+void Engine::transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout) {
     VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
     VkImageMemoryBarrier barrier{};
@@ -808,9 +793,9 @@ void Engine::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, u
     region.imageSubresource.layerCount = 1;
     region.imageOffset = {0, 0, 0};
     region.imageExtent = {
-            width,
-            height,
-            1
+        width,
+        height,
+        1
     };
 
     vkCmdCopyBufferToImage(commandBuffer, buffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
@@ -818,37 +803,18 @@ void Engine::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, u
     endSingleTimeCommands(commandBuffer);
 }
 
-bool Engine::loadModel() {
-
-    static int i = 0;
-    i++;
-    if (!(i%600 == 301 || i%600 == 1)) {
-        return false;
-    }
-
+bool Engine::loadModel(const std::vector<Vertex>& raw_vertices) {
     objIndices.clear();
     objVertices.clear();
 
-    std::unordered_map<tVertex, uint32_t> uniqueVertices{};
-    std::vector<glm::vec2> raw_vertexes = {
-        {0.0f, 0.0f},
-        {0.0f, 1.0f},
-        {1.0f, 1.0f},
-        {0.0f, 0.0f},
-        {1.0f, 1.0f},
-        {1.0f, 0.0f},
-    };
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 
-    for (const auto& raw_vertex : raw_vertexes) {
-        tVertex vertex{};
-        if (i%600 > 300) {
-            vertex.pos = {raw_vertex.x, raw_vertex.y};
-        } else {
-            vertex.pos = {-raw_vertex.x, -raw_vertex.y};
-        }
-
-        vertex.texCoord = {raw_vertex.x, raw_vertex.y};
-        vertex.color = {1.0f, 1.0f, 1.0f};
+    for (const auto& raw_vertex : raw_vertices) {
+        Vertex vertex{
+            .pos = {raw_vertex.pos[0], raw_vertex.pos[1]},
+            .texCoord = {raw_vertex.texCoord[0], raw_vertex.texCoord[1]},
+            .type = raw_vertex.type
+        };
 
         if (uniqueVertices.count(vertex) == 0) {
             uniqueVertices[vertex] = static_cast<uint32_t>(objVertices.size());
@@ -967,9 +933,10 @@ void Engine::createDescriptorSets() {
     }
 }
 
-void
-Engine::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer,
-                     VkDeviceMemory &bufferMemory) {
+void Engine::createBuffer(
+    VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer,
+    VkDeviceMemory &bufferMemory
+) {
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size = size;
@@ -1107,8 +1074,8 @@ void Engine::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIn
 
     VkBuffer vertexBuffers[] = {vertexBuffer};
     VkDeviceSize offsets[] = {0};
-    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
 
+    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
     vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
@@ -1151,10 +1118,6 @@ void Engine::updateUniformBuffer(uint32_t currentImage) {
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
     UniformBufferObject ubo{};
-    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float) swapChainExtent.height, 0.1f, 10.0f);
-    ubo.proj[1][1] *= -1;
 
     memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
@@ -1177,11 +1140,6 @@ void Engine::drawFrame() {
     vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
     vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
-
-    if (loadModel()) {
-        copyVertexBuffer();
-        copyIndexBuffer();
-    }
 
     recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
 
@@ -1385,16 +1343,23 @@ std::vector<const char *> Engine::getRequiredExtensions() {
     return extensions;
 }
 
+/**
+ * @brief Checks if all the requested validation layers are available
+ *
+ * @return True if all the requested validation layers are available
+ */
 bool Engine::checkValidationLayerSupport() {
+    /* READ LAYERS INTO VECTOR */
     uint32_t layerCount;
     vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-
     std::vector<VkLayerProperties> availableLayers(layerCount);
     vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
+    /* CHECK IF ALL REQUESTED LAYERS ARE AVAILABLE */
     for (const char* layerName : validationLayers) {
         bool layerFound = false;
 
+        /* SEARCH FOR SPECIFIC LAYER */
         for (const auto& layerProperties : availableLayers) {
             if (strcmp(layerName, layerProperties.layerName) == 0) {
                 layerFound = true;
@@ -1402,6 +1367,7 @@ bool Engine::checkValidationLayerSupport() {
             }
         }
 
+        /* IF A LAYER IS NOT FOUND, RETURN FALSE */
         if (!layerFound) {
             return false;
         }
@@ -1410,16 +1376,26 @@ bool Engine::checkValidationLayerSupport() {
     return true;
 }
 
+/**
+ * @brief Reads a file into a buffer
+ * @param filename The file to read
+ *
+ * @return The buffer containing the file
+ */
 std::vector<char> Engine::readFile(const std::string &filename) {
+    /* OPEN FILE IS VALID*/
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
+    /* ENSURE FILE IS VALID*/
     if (!file.is_open()) {
         throw std::runtime_error("failed to open file!");
     }
 
+    /* GET FILE SIZE AND ALLOCATE BUFFER */
     std::streamsize fileSize = (std::streamsize) file.tellg();
     std::vector<char> buffer(fileSize);
 
+    /* RESET FILE POINTER AND READ FILE */
     file.seekg(0);
     file.read(buffer.data(), fileSize);
 
@@ -1428,14 +1404,54 @@ std::vector<char> Engine::readFile(const std::string &filename) {
     return buffer;
 }
 
-VkBool32 Engine::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-                               VkDebugUtilsMessageTypeFlagsEXT messageType,
-                               const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData) {
+/**
+ * @brief Creates a debug messenger
+ * @param instance The instance to create the debug messenger for
+ * @param createInfo The debug messenger creation info
+ * @param allocator The allocator to use
+ * @param debugMessenger The debug messenger to create
+ *
+ * @return The result of the debug messenger creation
+ */
+VkBool32 Engine::debugCallback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType,
+    const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData
+) {
     std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
 
     return VK_FALSE;
 }
 
+/**
+ * @brief Wrapper to wait for the device to be idle
+ */
 void Engine::waitDeviceIdle() {
     vkDeviceWaitIdle(device);
+}
+
+void Engine::updateVertices(const std::vector<Vertex> &raw_vertices) {
+    /* CLEAN INDICES AND VERTICES */
+    objIndices.clear();
+    objVertices.clear();
+
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+
+    for (const auto& raw_vertex : raw_vertices) {
+        Vertex vertex{
+            .pos = {raw_vertex.pos[0] - 0.5, raw_vertex.pos[1] - 0.5},
+            .texCoord = {raw_vertex.texCoord[0], raw_vertex.texCoord[1]},
+            .type = raw_vertex.type
+        };
+
+        if (uniqueVertices.count(vertex) == 0) {
+            uniqueVertices[vertex] = static_cast<uint32_t>(objVertices.size());
+            objVertices.push_back(vertex);
+        }
+
+        objIndices.push_back(uniqueVertices[vertex]);
+    }
+
+    loadModel(raw_vertices);
+    copyVertexBuffer();
+    copyIndexBuffer();
 }

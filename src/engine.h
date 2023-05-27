@@ -12,7 +12,6 @@
 #include "GLFW/glfw3.h"
 
 #define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -45,7 +44,6 @@
 #include <unordered_map>
 //</editor-fold>
 
-
 class Engine {
 public:
     //<editor-fold desc="/* CONSTANTS */" defaultstate="collapsed">
@@ -65,13 +63,19 @@ public:
     explicit Engine(Window *window);
     ~Engine();
 
-    void initVulkan();
-
     bool framebufferResized = false;
 
     void waitDeviceIdle();
 
     void drawFrame();
+
+    bool loadModel(const std::vector<Vertex>& raw_vertices);
+
+    void copyVertexBuffer();
+
+    void copyIndexBuffer();
+
+    void updateVertices(const std::vector<Vertex> &raw_vertices);
 
 private:
     //<editor-fold desc="/* PRIVATE PARAMETERS */" defaultstate="collapsed">
@@ -112,14 +116,14 @@ private:
     VkImageView textureImageView;
     VkSampler textureSampler;
 
-    std::vector<tVertex> objVertices;
+    std::vector<Vertex> objVertices;
     std::vector<uint32_t> objIndices;
 
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
     VkBuffer vertexStagingBuffer;
     VkDeviceMemory vertexStagingBufferMemory;
-    VkDeviceSize vertexBufferSize = sizeof(std::vector<tVertex>) * 50;
+    VkDeviceSize vertexBufferSize = sizeof(std::vector<Vertex>) * 50;
 
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
@@ -159,19 +163,15 @@ private:
     void createFramebuffers();
     void createCommandPool();
     void createColorResources();
-    void createDepthResources();
-    VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-    VkFormat findDepthFormat();
-    static bool hasStencilComponent(VkFormat format);
     void createTextureImage();
     VkSampleCountFlagBits getMaxUsableSampleCount();
     void createTextureImageView();
     void createTextureSampler();
     VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
     void createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-    void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+    void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
-    bool loadModel();
+
     void createVertexBuffer();
     void createIndexBuffer();
     void createUniformBuffers();
@@ -200,9 +200,6 @@ private:
     static std::vector<char> readFile(const std::string& filename);
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
 
-    void copyVertexBuffer();
-
-    void copyIndexBuffer();
 };
 
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
