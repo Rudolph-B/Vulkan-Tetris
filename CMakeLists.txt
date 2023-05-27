@@ -3,7 +3,7 @@ project(Vulkan-Tetris)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(Vulkan-Tetris main.cpp src/window.cpp src/window.h src/engine.cpp src/engine.h src/structs.h)
+add_executable(Vulkan-Tetris main.cpp src/window.cpp src/Window.h src/engine.cpp src/engine.h src/structs.h src/constants.h)
 target_link_libraries(Vulkan-Tetris glfw ${GLFW_LIBRARIES})
 
 find_package(Vulkan REQUIRED)
