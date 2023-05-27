@@ -41,16 +41,16 @@ int main() {
             /* CHECK FOR WINDOW UPDATES */
             glfwPollEvents();
 
-            /* PROCESS TETRIS TICK */
-            if (vTetris.tick()) {
-                /* IF TETRIS STATE CHANGED */
-
-                /* UPDATE VERTEXES */
-                tEngine.updateVertices(vTetris.getVertices());
-            }
-
-            //<editor-fold desc="/* FORCE FRAME RATE */" defaultstate="collapsed">
+            //<editor-fold desc="/* FORCE FRAME/TICK RATE */" defaultstate="collapsed">
             if (frameTime >= targetFrameTime) {
+                /* PROCESS TETRIS TICK */
+                if (vTetris.tick()) {
+                    /* IF TETRIS STATE CHANGED */
+
+                    /* UPDATE VERTEXES */
+                    tEngine.updateVertices(vTetris.getVertices());
+                }
+
                 /* RENDER FRAME */
                 tEngine.drawFrame();
                 nDrawnFrames++;

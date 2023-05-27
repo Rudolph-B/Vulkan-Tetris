@@ -16,31 +16,73 @@ public:
 
     //<editor-fold desc="/* PUBLIC METHODS */" defaultstate="collapsed">
     Tetris();
+
     ~Tetris();
 
     bool tick();
+
     std::vector<Vertex> getVertices();
     //</editor-fold>
 
     //<editor-fold desc="/* PUBLIC VARIABLES */" defaultstate="collapsed">
     //</editor-fold>
 
+    enum Colour {
+        NONE = 0,
+        RED = 1,
+        GREEN = 2,
+        BLUE = 3,
+        YELLOW = 4,
+        ORANGE = 5,
+        PURPLE = 6
+    };
+
+    enum Tetriminos {
+        I = 0,
+        J = 1,
+        L = 2,
+        O = 3,
+        S = 4,
+        T = 5,
+        Z = 6
+    };
+
 private:
     //<editor-fold desc="/* PRIVATE CONSTANTS */" defaultstate="collapsed">
-    const int TICK_DIVIDER = 10;
-    const int8_t BLUE = 1;
-    const int8_t RED = 2;
-    const int8_t GREEN = 3;
+    const int8_t TETRIMINO_SHAPES[7][4][2] = {
+    {{0, 0}, {0, 1}, {0,  2}, {0,  3}}, // I
+    {{0, 0}, {0, 1}, {0,  2}, {1,  2}}, // J
+    {{0, 0}, {0, 1}, {0,  2}, {-1, 2}}, // L
+    {{0, 0}, {0, 1}, {1,  0}, {1,  1}}, // O
+    {{0, 0}, {0, 1}, {1,  1}, {1,  2}}, // S
+    {{0, 0}, {0, 1}, {0,  2}, {1,  1}}, // T
+    {{0, 0}, {0, 1}, {-1, 1}, {-1, 2}} // Z
+    };
+
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE METHODS */" defaultstate="collapsed">
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE VARIABLES */" defaultstate="collapsed">
-    int8_t board[M_WIDTH][M_HEIGHT] = {0};
-    int64_t score = 0;
-    int64_t ticks = 0;
+    int tickDivider = 15;
+    Colour board[M_WIDTH][M_HEIGHT] = {Colour::NONE};
+
+    int64_t score;
+    int64_t ticks;
+    int8_t cursor_x;
+    int8_t cursor_y;
+    Colour cursor_colour;
+    Tetriminos cursor_tetrimino;
+
     //</editor-fold>
+    static std::vector<Vertex> buildVertices(int i, int j, Colour c);
+
+    void placeTetrimino();
+
+    bool canGoDown();
+
+    void newTetrimino();
 };
 
 
