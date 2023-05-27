@@ -17,11 +17,16 @@
 
 int main() {
     Window gWindow{};
-    Engine tEngine{gWindow.window};
+    Engine tEngine{&gWindow};
 
     try {
-        tEngine.mainLoop();
-        tEngine.cleanup();
+        gWindow.shouldClose();
+        while (!gWindow.shouldClose()) {
+            glfwPollEvents();
+            tEngine.drawFrame();
+        }
+
+        tEngine.waitDeviceIdle();
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;

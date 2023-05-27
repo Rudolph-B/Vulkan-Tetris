@@ -15,9 +15,9 @@ Window::Window() {
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-    window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan-Tetris", nullptr, nullptr);
-    glfwSetWindowUserPointer(window, this);
-    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+    glfwWindow = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan-Tetris", nullptr, nullptr);
+    glfwSetWindowUserPointer(glfwWindow, this);
+    glfwSetFramebufferSizeCallback(glfwWindow, framebufferResizeCallback);
 }
 
 void Window::framebufferResizeCallback(GLFWwindow *window, int width, int height) {
@@ -26,6 +26,10 @@ void Window::framebufferResizeCallback(GLFWwindow *window, int width, int height
 }
 
 Window::~Window() {
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(glfwWindow);
     glfwTerminate();
+}
+
+bool Window::shouldClose() {
+    return glfwWindowShouldClose(glfwWindow);
 }

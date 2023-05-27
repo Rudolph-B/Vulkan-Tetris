@@ -25,6 +25,7 @@
 
 #include "structs.h"
 #include "constants.h"
+#include "window.h"
 
 //<editor-fold desc="/* STANDARD INCLUDES */" defaultstate="collapsed">
 #include <iostream>
@@ -45,9 +46,6 @@
 //</editor-fold>
 
 
-VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
-void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
-
 class Engine {
 public:
     //<editor-fold desc="/* CONSTANTS */" defaultstate="collapsed">
@@ -64,16 +62,20 @@ public:
 
     //</editor-fold>
 
-    explicit Engine(GLFWwindow *window);
+    explicit Engine(Window *window);
+    ~Engine();
 
     void initVulkan();
-    void mainLoop();
-    void cleanup();
 
     bool framebufferResized = false;
+
+    void waitDeviceIdle();
+
+    void drawFrame();
+
 private:
     //<editor-fold desc="/* PRIVATE PARAMETERS */" defaultstate="collapsed">
-    GLFWwindow* window;
+    Window* window;
 
     /* VK PARAMETERS */
     VkInstance instance;
@@ -141,9 +143,7 @@ private:
     void cleanupSwapChain();
     void recreateSwapChain();
     void createInstance();
-
     static void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
-
     void setupDebugMessenger();
     void createSurface();
     void pickPhysicalDevice();
@@ -161,13 +161,13 @@ private:
     VkFormat findDepthFormat();
     static bool hasStencilComponent(VkFormat format);
     void createTextureImage();
-    void generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t _mipLevels);
+    void generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight);
     VkSampleCountFlagBits getMaxUsableSampleCount();
     void createTextureImageView();
     void createTextureSampler();
-    VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t _mipLevels);
-    void createImage(uint32_t width, uint32_t height, uint32_t _mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-    void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t _mipLevels);
+    VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
+    void createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+    void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
     void loadModel();
     void createVertexBuffer();
@@ -184,7 +184,7 @@ private:
     void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
     void createSyncObjects();
     void updateUniformBuffer(uint32_t currentImage);
-    void drawFrame();
+
     VkShaderModule createShaderModule(const std::vector<char>& code);
     static VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     static VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
@@ -199,5 +199,7 @@ private:
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
 };
 
+VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
+void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
 
 #endif //VULKAN_TETRIS_ENGINE_H
