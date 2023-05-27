@@ -28,6 +28,9 @@ public:
 private:
     //<editor-fold desc="/* PRIVATE CONSTANTS */" defaultstate="collapsed">
     const int TICK_DIVIDER = 10;
+    const int8_t BLUE = 1;
+    const int8_t RED = 2;
+    const int8_t GREEN = 3;
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE METHODS */" defaultstate="collapsed">

@@ -28,7 +28,7 @@ void main() {
             break;
         case 3:
         default:
-            fragColor = vec3(0.0, 0.0, 0.0);
+            fragColor = vec3(0.0, 0.0, 1.0);
             break;
     }
 }

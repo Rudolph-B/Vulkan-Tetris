@@ -27,44 +27,45 @@ std::vector<Vertex> Tetris::getVertices() {
                 // BL
                 vertices.push_back({
                     .pos = {(float)i / (float)M_WIDTH, (float)j / (float)M_HEIGHT},
-                    .texCoord = {0, 0},
+                    .tex = {0, 0},
+                    .type = board[i][j]
+                });
+
+                // BR
+                vertices.push_back({
+                    .pos = {(float)(i + 1) / (float)M_WIDTH, (float)j / (float)M_HEIGHT},
+                    .tex = {0, 0},
                     .type = board[i][j]
                 });
 
                 // TL
                 vertices.push_back({
                     .pos = {(float)i / (float)M_WIDTH, (float)(j + 1) / (float)M_HEIGHT},
-                    .texCoord = {0, 0},
+                    .tex = {0, 0},
                     .type = board[i][j]
                 });
 
-                // BR
+                // TL
                 vertices.push_back({
-                    .pos = {(float)(i + 1) / (float)M_WIDTH, (float)j / (float)M_HEIGHT},
-                    .texCoord = {0, 0},
-                    .type = board[i][j]
-                });
-
-                // BR
-                vertices.push_back({
-                    .pos = {(float)(i + 1) / (float)M_WIDTH, (float)j / (float)M_HEIGHT},
-                    .texCoord = {0, 0},
+                    .pos = {(float)(i + 1) / (float)M_WIDTH, (float)(j + 1) / (float)M_HEIGHT},
+                    .tex = {0, 0},
                     .type = board[i][j]
                 });
 
                 // TR
                 vertices.push_back({
                     .pos = {(float)i / (float)M_WIDTH, (float)(j + 1) / (float)M_HEIGHT},
-                    .texCoord = {0, 0},
+                    .tex = {0, 0},
                     .type = board[i][j]
                 });
 
-                // TL
+                // BR
                 vertices.push_back({
-                    .pos = {(float)i / (float)M_WIDTH, (float)(j + 1) / (float)M_HEIGHT},
-                    .texCoord = {0, 0},
+                    .pos = {(float)(i + 1) / (float)M_WIDTH, (float)j / (float)M_HEIGHT},
+                    .tex = {0, 0},
                     .type = board[i][j]
                 });
+
                 //</editor-fold>
             }
         }
@@ -74,12 +75,20 @@ std::vector<Vertex> Tetris::getVertices() {
 }
 
 Tetris::Tetris() {
-    board[0][0] = 1;
-    board[0][1] = 1;
-    board[2][0] = 1;
-    board[0][3] = 1;
-    board[2][2] = 1;
-    board[3][3] = 1;
+    board[0][0] = BLUE;
+    board[0][1] = BLUE;
+    board[1][0] = BLUE;
+    board[2][0] = BLUE;
+
+    board[2][1] = RED;
+    board[3][1] = RED;
+    board[3][0] = RED;
+    board[4][0] = RED;
+
+    board[3][15] = GREEN;
+    board[3][14] = GREEN;
+    board[3][13] = GREEN;
+    board[3][12] = GREEN;
 }
 
 Tetris::~Tetris() {

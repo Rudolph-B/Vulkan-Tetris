@@ -15,7 +15,7 @@
 
 struct Vertex {
     glm::vec2 pos;
-    glm::vec2 texCoord;
+    glm::vec2 tex;
     glm::int32_t type;
 
     static VkVertexInputBindingDescription getBindingDescription() {
@@ -38,7 +38,7 @@ struct Vertex {
         attributeDescriptions[1].binding = 0;
         attributeDescriptions[1].location = 1;
         attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, texCoord);
+        attributeDescriptions[1].offset = offsetof(Vertex, tex);
 
         attributeDescriptions[2].binding = 0;
         attributeDescriptions[2].location = 2;
@@ -49,14 +49,14 @@ struct Vertex {
     }
 
     bool operator==(const Vertex& other) const {
-        return pos == other.pos && type == other.type && texCoord == other.texCoord;
+        return pos == other.pos && type == other.type && tex == other.tex;
     }
 };
 
 namespace std {
     template<> struct hash<Vertex> {
         size_t operator()(Vertex const& vertex) const {
-            return ((hash<glm::vec2>()(vertex.pos) ^ (hash<glm::int16>()(vertex.type) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
+            return ((hash<glm::vec2>()(vertex.pos) ^ (hash<glm::int16>()(vertex.type) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.tex) << 1);
         }
     };
 }

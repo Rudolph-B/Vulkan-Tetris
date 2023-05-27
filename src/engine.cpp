@@ -812,7 +812,7 @@ bool Engine::loadModel(const std::vector<Vertex>& raw_vertices) {
     for (const auto& raw_vertex : raw_vertices) {
         Vertex vertex{
             .pos = {raw_vertex.pos[0], raw_vertex.pos[1]},
-            .texCoord = {raw_vertex.texCoord[0], raw_vertex.texCoord[1]},
+            .tex = {raw_vertex.tex[0], raw_vertex.tex[1]},
             .type = raw_vertex.type
         };
 
@@ -1429,18 +1429,18 @@ void Engine::waitDeviceIdle() {
     vkDeviceWaitIdle(device);
 }
 
-void Engine::updateVertices(const std::vector<Vertex> &raw_vertices) {
+void Engine::updateVertices(const std::vector<Vertex> &nVertices) {
     /* CLEAN INDICES AND VERTICES */
     objIndices.clear();
     objVertices.clear();
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 
-    for (const auto& raw_vertex : raw_vertices) {
+    for (const auto& nVertex : nVertices) {
         Vertex vertex{
-            .pos = {raw_vertex.pos[0] - 0.5, raw_vertex.pos[1] - 0.5},
-            .texCoord = {raw_vertex.texCoord[0], raw_vertex.texCoord[1]},
-            .type = raw_vertex.type
+            .pos = {nVertex.pos[0] * 2 - 1.0, -1.0 * (nVertex.pos[1] * 2 - 1.0)},
+            .tex = nVertex.tex,
+            .type = nVertex.type
         };
 
         if (uniqueVertices.count(vertex) == 0) {
@@ -1451,7 +1451,6 @@ void Engine::updateVertices(const std::vector<Vertex> &raw_vertices) {
         objIndices.push_back(uniqueVertices[vertex]);
     }
 
-    loadModel(raw_vertices);
     copyVertexBuffer();
     copyIndexBuffer();
 }

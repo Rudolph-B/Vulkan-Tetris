@@ -75,7 +75,7 @@ public:
 
     void copyIndexBuffer();
 
-    void updateVertices(const std::vector<Vertex> &raw_vertices);
+    void updateVertices(const std::vector<Vertex> &nVertices);
 
 private:
     //<editor-fold desc="/* PRIVATE PARAMETERS */" defaultstate="collapsed">
