@@ -3,21 +3,20 @@ project(Vulkan-Tetris)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(Vulkan-Tetris main.cpp)
+add_executable(Vulkan-Tetris main.cpp src/window.cpp src/window.h src/engine.cpp src/engine.h src/structs.h)
 target_link_libraries(Vulkan-Tetris glfw ${GLFW_LIBRARIES})
 
 find_package(Vulkan REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 
+include_directories(lib)
+
 add_subdirectory(lib/glm)
 target_link_libraries(${PROJECT_NAME} glm)
 
 add_subdirectory(lib/glfw)
 target_link_libraries(${PROJECT_NAME} glfw)
-
-include_directories(lib/stb)
-include_directories(lib/tinyobjloader)
 
 set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
 

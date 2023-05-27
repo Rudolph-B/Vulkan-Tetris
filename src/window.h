@@ -1,0 +1,14 @@
+/*
+ * CREATED BY RUDOLPH ON 2023-05-27.
+ */
+
+#ifndef VULKAN_TETRIS_WINDOW_H
+#define VULKAN_TETRIS_WINDOW_H
+
+
+class window {
+
+};
+
+
+#endif //VULKAN_TETRIS_WINDOW_H
