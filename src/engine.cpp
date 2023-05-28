@@ -78,19 +78,8 @@ Engine::~Engine() {
 
     vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
 
-    //<editor-fold desc="/* CLEAN INDEX BUFFERS */" defaultstate="collapsed">
-    vkDestroyBuffer(device, indexBuffer, nullptr);
-    vkFreeMemory(device, indexBufferMemory, nullptr);
-    vkDestroyBuffer(device, indexStagingBuffer, nullptr);
-    vkFreeMemory(device, indexStagingBufferMemory, nullptr);
-    //</editor-fold>
-
-    //<editor-fold desc="/* CLEAN VERTEX BUFFERS */" defaultstate="collapsed">
-    vkDestroyBuffer(device, vertexBuffer, nullptr);
-    vkFreeMemory(device, vertexBufferMemory, nullptr);
-    vkDestroyBuffer(device, vertexStagingBuffer, nullptr);
-    vkFreeMemory(device, vertexStagingBufferMemory, nullptr);
-    //</editor-fold>
+    cleanIndexBuffer();
+    cleanVertexBuffer();
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
@@ -835,10 +824,17 @@ void Engine::createVertexBuffer() {
 void Engine::copyVertexBuffer() {
     void* data;
     vkMapMemory(device, vertexStagingBufferMemory, 0, vertexBufferSize, 0, &data);
-    memcpy(data, objVertices.data(), (size_t) vertexBufferSize);
+    memcpy(data, objVertices.data(), objVertices.size() * sizeof (objVertices[0]));
     vkUnmapMemory(device, vertexStagingBufferMemory);
 
     copyBuffer(vertexStagingBuffer, vertexBuffer, vertexBufferSize);
+}
+
+void Engine::cleanVertexBuffer() {
+    vkDestroyBuffer(device, vertexBuffer, nullptr);
+    vkFreeMemory(device, vertexBufferMemory, nullptr);
+    vkDestroyBuffer(device, vertexStagingBuffer, nullptr);
+    vkFreeMemory(device, vertexStagingBufferMemory, nullptr);
 }
 
 void Engine::createIndexBuffer() {
@@ -849,10 +845,17 @@ void Engine::createIndexBuffer() {
 void Engine::copyIndexBuffer() {
     void* data;
     vkMapMemory(device, vertexStagingBufferMemory, 0, indexBufferSize, 0, &data);
-    memcpy(data, objIndices.data(), (size_t) indexBufferSize);
+    memcpy(data, objIndices.data(), objIndices.size() * sizeof (objIndices[0]));
     vkUnmapMemory(device, vertexStagingBufferMemory);
 
     copyBuffer(vertexStagingBuffer, indexBuffer, indexBufferSize);
+}
+
+void Engine::cleanIndexBuffer() {
+    vkDestroyBuffer(device, indexBuffer, nullptr);
+    vkFreeMemory(device, indexBufferMemory, nullptr);
+    vkDestroyBuffer(device, indexStagingBuffer, nullptr);
+    vkFreeMemory(device, indexStagingBufferMemory, nullptr);
 }
 
 void Engine::createUniformBuffers() {
@@ -867,6 +870,45 @@ void Engine::createUniformBuffers() {
 
         vkMapMemory(device, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
     }
+}
+
+void Engine::updateVertices(const std::vector<Vertex> &nVertices) {
+    /* CLEAN INDICES AND VERTICES */
+    objIndices.clear();
+    objVertices.clear();
+
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+
+    for (const auto& nVertex : nVertices) {
+        Vertex vertex{
+                .pos = {nVertex.pos[0] * 2 - 1.0, -1.0 * (nVertex.pos[1] * 2 - 1.0)},
+                .tex = nVertex.tex,
+                .type = nVertex.type
+        };
+
+        if (uniqueVertices.count(vertex) == 0) {
+            uniqueVertices[vertex] = static_cast<uint32_t>(objVertices.size());
+            objVertices.push_back(vertex);
+        }
+
+        objIndices.push_back(uniqueVertices[vertex]);
+    }
+
+    /* UPDATE INDEX&VERTEX BUFFER SIZE */
+    if (indexBufferSize <= objIndices.size() * sizeof(uint32_t) || vertexBufferSize <= objVertices.size() * sizeof(Vertex)) {
+
+        cleanIndexBuffer();
+        cleanVertexBuffer();
+
+        indexBufferSize = 2 * objIndices.size() * sizeof(uint32_t);
+        vertexBufferSize = 2 * objVertices.size() * sizeof(Vertex);
+
+        createVertexBuffer();
+        createIndexBuffer();
+    }
+
+    copyVertexBuffer();
+    copyIndexBuffer();
 }
 
 void Engine::createDescriptorPool() {
@@ -1429,28 +1471,3 @@ void Engine::waitDeviceIdle() {
     vkDeviceWaitIdle(device);
 }
 
-void Engine::updateVertices(const std::vector<Vertex> &nVertices, KeyBoard keyboard) {
-    /* CLEAN INDICES AND VERTICES */
-    objIndices.clear();
-    objVertices.clear();
-
-    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
-
-    for (const auto& nVertex : nVertices) {
-        Vertex vertex{
-            .pos = {nVertex.pos[0] * 2 - 1.0, -1.0 * (nVertex.pos[1] * 2 - 1.0)},
-            .tex = nVertex.tex,
-            .type = nVertex.type
-        };
-
-        if (uniqueVertices.count(vertex) == 0) {
-            uniqueVertices[vertex] = static_cast<uint32_t>(objVertices.size());
-            objVertices.push_back(vertex);
-        }
-
-        objIndices.push_back(uniqueVertices[vertex]);
-    }
-
-    copyVertexBuffer();
-    copyIndexBuffer();
-}

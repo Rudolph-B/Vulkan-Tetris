@@ -49,14 +49,219 @@ public:
 
 private:
     //<editor-fold desc="/* PRIVATE CONSTANTS */" defaultstate="collapsed">
-    const int8_t TETRIMINO_SHAPES[7][4][2] = {
-    {{0, 0}, {0, 1}, {0,  2}, {0,  3}}, // I
-    {{0, 0}, {0, 1}, {0,  2}, {1,  2}}, // J
-    {{0, 0}, {0, 1}, {0,  2}, {-1, 2}}, // L
-    {{0, 0}, {0, 1}, {1,  0}, {1,  1}}, // O
-    {{0, 0}, {0, 1}, {1,  1}, {1,  2}}, // S
-    {{0, 0}, {0, 1}, {0,  2}, {1,  1}}, // T
-    {{0, 0}, {0, 1}, {-1, 1}, {-1, 2}} // Z
+    //<editor-fold desc="/* TETRIMINO ROTATIONS */" defaultstate="collapsed">
+    //<editor-fold desc="/* O_ROTATIONS */" defaultstate="collapsed">
+    const int8_t O_ROTATIONS[4][4][4] = {
+            {
+                    {1, 1, 0, 0},
+                    {1, 1, 0, 0},
+                    {0,  0, 0,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {1, 1, 0, 0},
+                    {1, 1, 0, 0},
+                    {0,  0, 0,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {1, 1, 0, 0},
+                    {1, 1, 0, 0},
+                    {0,  0, 0,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {1, 1, 0, 0},
+                    {1, 1, 0, 0},
+                    {0,  0, 0,0},
+                    {0,  0, 0,0}
+            }
+    };
+    //</editor-fold>
+
+    //<editor-fold desc="/* I_ROTATIONS */" defaultstate="collapsed">
+    const int8_t I_ROTATIONS[4][4][4] = {
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 1, 1},
+                    {0,  0, 0,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {0,  1, 0,0},
+                    {0,  1, 0,0}
+            },
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 1, 1},
+                    {0,  0, 0,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {0,  1, 0,0},
+                    {0,  1, 0,0}
+            }
+    };
+    //</editor-fold>
+
+    //<editor-fold desc="/* J_ROTATIONS */" defaultstate="collapsed">
+    const int8_t J_ROTATIONS[4][4][4] = {
+            {
+                    {1, 0, 0, 0},
+                    {1, 1, 1, 0},
+                    {0,  0, 0,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {0, 1, 1, 0},
+                    {0, 1, 0, 0},
+                    {0,  1, 0,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 1, 0},
+                    {0,  0, 1,0},
+                    {0,  0, 0,0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {1,  1, 0,0},
+                    {0,  0, 0,0}
+            }
+    };
+    //</editor-fold>
+
+    //<editor-fold desc="/* L_ROTATIONS */" defaultstate="collapsed">
+    const int8_t L_ROTATIONS[4][4][4] = {
+            {
+                    {0, 0, 1, 0},
+                    {1, 1, 1, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {0, 1, 1, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 1, 0},
+                    {1, 0, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {1, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0}
+            }
+    };
+    //</editor-fold>
+
+    //<editor-fold desc="/* S_ROTATIONS */" defaultstate="collapsed">
+    const int8_t S_ROTATIONS[4][4][4] = {
+            {
+                    {0, 1, 1, 0},
+                    {1, 1, 0, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {0, 1, 1, 0},
+                    {0, 0, 1, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 0, 0, 0},
+                    {0, 1, 1, 0},
+                    {1, 1, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {1, 0, 0, 0},
+                    {1, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0}
+            }
+    };
+    //</editor-fold>
+
+    //<editor-fold desc="/* T_ROTATIONS */" defaultstate="collapsed">
+    const int8_t T_ROTATIONS[4][4][4] = {
+            {
+                    {0, 1, 0, 0},
+                    {1, 1, 1, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {0, 1, 1, 0},
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 1, 0},
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {1, 1, 0, 0},
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0}
+            }
+    };
+    //</editor-fold>
+
+    //<editor-fold desc="/* J_ROTATIONS */" defaultstate="collapsed">
+    const int8_t Z_ROTATIONS[4][4][4] = {
+            {
+                    {1, 1, 0, 0},
+                    {0, 1, 1, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 0, 1, 0},
+                    {0, 1, 1, 0},
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 0, 0, 0},
+                    {1, 1, 0, 0},
+                    {0, 1, 1, 0},
+                    {0, 0, 0, 0}
+            },
+            {
+                    {0, 1, 0, 0},
+                    {1, 1, 0, 0},
+                    {1, 0, 0, 0},
+                    {0, 0, 0, 0}
+            }
+    };
+    //</editor-fold>
+
+    //</editor-fold>
+    const int8_t (*const TETRIMINO_SHAPES[7])[4][4][4] = {
+        &I_ROTATIONS,
+        &J_ROTATIONS,
+        &L_ROTATIONS,
+        &O_ROTATIONS,
+        &S_ROTATIONS,
+        &T_ROTATIONS,
+        &Z_ROTATIONS
     };
 
     //</editor-fold>
@@ -70,7 +275,7 @@ private:
 
     void newTetrimino();
 
-    bool canGoHere(int8_t x, int8_t y);
+    bool canGoHere(int8_t x, int8_t y, int r = 0);
 
     void clearRows();
 
@@ -79,20 +284,36 @@ private:
 
     //<editor-fold desc="/* PRIVATE VARIABLES */" defaultstate="collapsed">
     int dropTickDivider = 30;
-    int moveTickDivider = 3;
-    Colour board[M_WIDTH][M_HEIGHT + 2] = {Colour::NONE};
+    int moveTickOffset = 3;
+    Colour board[M_WIDTH][M_HEIGHT + 4] = {Colour::NONE};
+    bool start = false;
 
     int64_t score;
     int64_t ticks;
     int8_t cursor_x;
     int8_t cursor_y;
     Colour cursor_colour;
+    int cursor_rotation;
     Tetriminos cursor_tetrimino;
+
+    int nextLeftTick = 0;
+    int nextRightTick = 0;
+    int nextDownTick = 0;
+    int nextUpTick = 0;
+    int nextSpaceTick = 0;
+
     //</editor-fold>
 
     static Colour randomColour();
     static Tetriminos randomTetrimino();
-};
 
+    bool canGoLeft();
+
+    bool canGoRight();
+
+    void rotateLeft();
+
+    void rotateRight();
+};
 
 #endif //VULKAN_TETRIS_TETRIS_H

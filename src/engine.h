@@ -75,7 +75,7 @@ public:
 
     void copyIndexBuffer();
 
-    void updateVertices(const std::vector<Vertex> &nVertices, KeyBoard keyboard);
+    void updateVertices(const std::vector<Vertex> &nVertices);
 
 private:
     //<editor-fold desc="/* PRIVATE PARAMETERS */" defaultstate="collapsed">
@@ -123,13 +123,13 @@ private:
     VkDeviceMemory vertexBufferMemory;
     VkBuffer vertexStagingBuffer;
     VkDeviceMemory vertexStagingBufferMemory;
-    VkDeviceSize vertexBufferSize = sizeof(std::vector<Vertex>) * 50;
+    VkDeviceSize vertexBufferSize = sizeof(Vertex) * 100;
 
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
     VkBuffer indexStagingBuffer;
     VkDeviceMemory indexStagingBufferMemory;
-    VkDeviceSize indexBufferSize = sizeof(std::vector<uint32_t>) * 50;
+    VkDeviceSize indexBufferSize = sizeof(uint32_t) * 100;
 
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
@@ -200,6 +200,9 @@ private:
     static std::vector<char> readFile(const std::string& filename);
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
 
+    void cleanVertexBuffer();
+
+    void cleanIndexBuffer();
 };
 
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);

@@ -8,6 +8,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 #include "constants.h"
+#include "structs.h"
 
 
 class Window {
@@ -19,7 +20,19 @@ public:
 
     bool shouldClose() const;
 
+    void pollEvents();
+
+    KeyBoard getKeyBoard();
+
+    void clearEvents();
+
 private:
+    KeyBoard keyboard = {GLFW_RELEASE};
+    const int KEYS[13] = {
+        GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_DOWN, GLFW_KEY_UP, GLFW_KEY_SPACE,
+        GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN, GLFW_KEY_ENTER, GLFW_KEY_ESCAPE,
+        GLFW_KEY_1, GLFW_KEY_2, GLFW_KEY_3, GLFW_KEY_4,
+    };
 
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 

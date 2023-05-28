@@ -7,13 +7,58 @@
 
 bool Tetris::tick(KeyBoard keyboard) {
     ticks++;
+    bool state_changed = false;
 
-    if ((ticks % moveTickDivider) != 1) {
-
+    if (keyboard.enter) {
+        clearBoard();
+        start = true;
     }
 
-    if ((ticks % dropTickDivider) != 1) {
+    if (!start) {
         return false;
+    }
+
+    if (keyboard.space && nextSpaceTick < ticks) {
+        while (canGoDown()) {
+            cursor_y--;
+        }
+
+        nextLeftTick = ticks + moveTickOffset * 2;
+        return true;
+    }
+
+    if (keyboard.left && nextLeftTick < ticks) {
+        if (canGoLeft()) {
+            cursor_x--;
+            nextLeftTick = ticks + moveTickOffset;
+            state_changed = true;
+        }
+    }
+
+    if (keyboard.right && nextRightTick < ticks) {
+        if (canGoRight()) {
+            cursor_x++;
+            nextRightTick = ticks + moveTickOffset;
+            state_changed = true;
+        }
+    }
+
+    if (keyboard.up && nextUpTick < ticks) {
+        rotateLeft();
+        nextUpTick = ticks + moveTickOffset * 3;
+        state_changed = true;
+    }
+
+    if (keyboard.down && nextDownTick < ticks) {
+        if (canGoDown()) {
+            nextDownTick = ticks + moveTickOffset;
+            cursor_y--;
+            state_changed = true;
+        }
+    }
+
+    if (((ticks % dropTickDivider) != 1)) {
+        return state_changed;
     }
 
     if (!canGoDown()) {
@@ -25,8 +70,8 @@ bool Tetris::tick(KeyBoard keyboard) {
 
         // Check for game over
         if (!canGoDown()) {
-            clearBoard();
-            return false;
+            start = false;
+            return true;
         }
     }
     cursor_y--;
@@ -51,15 +96,20 @@ std::vector<Vertex> Tetris::getVertices() {
         }
     }
 
-    for (int i = 0; i < 4; i++) {
-        std::vector<Vertex> newVertices = buildVertices(cursor_x + TETRIMINO_SHAPES[cursor_tetrimino][i][0], cursor_y + TETRIMINO_SHAPES[cursor_tetrimino][i][1], cursor_colour);
-        vertices.insert(std::end(vertices), std::begin(newVertices), std::end(newVertices));
+    for (int x = 0; x < 4; x++) {
+        for (int y = 0; y < 4; y++) {
+            if ((*TETRIMINO_SHAPES[cursor_tetrimino])[cursor_rotation][x][y]) {
+                std::vector<Vertex> newVertices = buildVertices(cursor_x + x, cursor_y + y, cursor_colour);
+                vertices.insert(std::end(vertices), std::begin(newVertices), std::end(newVertices));
+            }
+        }
     }
 
     return vertices;
 }
 
 Tetris::Tetris() {
+    ticks = 0;
     ticks = 0;
     srand(time(nullptr));
 
@@ -83,30 +133,56 @@ std::vector<Vertex> Tetris::buildVertices(int i, int j, Colour c) {
 }
 
 void Tetris::placeTetrimino() {
-    for (int i = 0; i < 4; i++) {
-        uint8_t x = cursor_x + TETRIMINO_SHAPES[cursor_tetrimino][i][0];
-        uint8_t y = cursor_y + TETRIMINO_SHAPES[cursor_tetrimino][i][1];
-        board[x][y] = cursor_colour;
+    for (int x = 0; x < 4; x++) {
+        for (int y = 0; y < 4; y++) {
+            if ((*TETRIMINO_SHAPES[cursor_tetrimino])[cursor_rotation][x][y]) {
+                int bx = cursor_x + x;
+                int by = cursor_y + y;
+                if (!(by < 0 | bx < 0 | bx >= M_WIDTH)) {
+                    board[bx][by] = cursor_colour;
+                }
+            }
+        }
     }
 
     score += 10;
+}
+
+void Tetris::rotateLeft() {
+    if (canGoHere(0,0,1)) {
+        cursor_rotation = (cursor_rotation + 1) % 4;
+    }
 }
 
 bool Tetris::canGoDown() {
     return canGoHere(0, -1);
 }
 
-bool Tetris::canGoHere(int8_t x, int8_t y) {
-    for (int i = 0; i < 4; i++) {
-        int8_t bx = cursor_x + TETRIMINO_SHAPES[cursor_tetrimino][i][0] + x;
-        int8_t by = cursor_y + TETRIMINO_SHAPES[cursor_tetrimino][i][1] + y;
-        if (by < 0 | bx < 0 | bx >= M_WIDTH) {
-            return false;
-        }
-        if (board[bx][by]) {
-            return false;
+bool Tetris::canGoLeft() {
+    return canGoHere(-1, 0);
+}
+
+bool Tetris::canGoRight() {
+    return canGoHere(1, 0);
+}
+
+bool Tetris::canGoHere(int8_t ox, int8_t oy, int r) {
+    int cr = (cursor_rotation + r) % 4;
+    for (int x = 0; x < 4; x++) {
+        for (int y = 0; y < 4; y++) {
+            if ((*TETRIMINO_SHAPES[cursor_tetrimino])[cr][x][y]) {
+                int bx = cursor_x + x + ox;
+                int by = cursor_y + y + oy;
+                if (by < 0 | bx < 0 | bx >= M_WIDTH) {
+                    return false;
+                }
+                if (board[bx][by]) {
+                    return false;
+                }
+            }
         }
     }
+
     return true;
 }
 
@@ -115,6 +191,7 @@ void Tetris::newTetrimino() {
     cursor_tetrimino = randomTetrimino();
     cursor_colour = randomColour();
     cursor_y = M_HEIGHT - 1;
+    cursor_rotation = 0;
 }
 
 void Tetris::clearRows() {

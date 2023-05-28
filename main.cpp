@@ -24,7 +24,6 @@ int main() {
 
     try {
         /* INIT STATS */
-        auto fpsStartTime = std::chrono::high_resolution_clock::now();
         auto startTime = std::chrono::high_resolution_clock::now();
         float frameTime = 0.0f; // Time since last frame
         const float targetFrameTime = 1.0f / 60.0f; // 60 FPS
@@ -51,7 +50,7 @@ int main() {
                     /* IF TETRIS STATE CHANGED */
 
                     /* UPDATE VERTEXES */
-                    tEngine.updateVertices(vTetris.getVertices(), keyboard);
+                    tEngine.updateVertices(vTetris.getVertices());
                 }
 
                 /* RENDER FRAME */
@@ -61,15 +60,6 @@ int main() {
 
                 /* CLEAR EVENTS */
                 gWindow.clearEvents();
-            }
-            //</editor-fold>
-
-            //<editor-fold desc="/* PRINT FPS */" defaultstate="collapsed">
-            float time = std::chrono::duration<float, std::chrono::seconds::period>(endTime - fpsStartTime).count();
-            if (time >= 1.0) {
-                std::cerr << "FPS: " << nDrawnFrames << std::endl;
-                fpsStartTime = std::chrono::high_resolution_clock::now();
-                nDrawnFrames = 0;
             }
             //</editor-fold>
         }
