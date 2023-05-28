@@ -11,7 +11,7 @@
  * @param keyboard
  * @return
  */
-bool Tetris::tick(KeyBoard keyboard) {
+bool Tetris::tick(Keyboard keyboard) {
     ticks++;
     bool state_changed = false;
 
@@ -326,6 +326,13 @@ void Tetris::clearBoard() {
     score = 0;
     ticks = 0;
 
+    // Reset timers
+    nextLeftTick = 0;
+    nextRightTick = 0;
+    nextDownTick = 0;
+    nextUpTick = 0;
+    nextSpaceTick = 0;
+
     // Clear board
     for (auto &row: board) {
         for (auto &cell: row) {
@@ -388,4 +395,8 @@ Tetris::Tetriminos Tetris::randomTetrimino() {
     }
 
     return tetrimino;
+}
+
+int Tetris::getTicks() {
+    return ticks;
 }

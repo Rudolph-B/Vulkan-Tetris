@@ -43,7 +43,7 @@ int main() {
 
             //<editor-fold desc="/* FORCE FRAME/TICK RATE */" defaultstate="collapsed">
             if (frameTime >= targetFrameTime) {
-                KeyBoard keyboard = gWindow.getKeyBoard();
+                Keyboard keyboard = gWindow.getKeyboard();
 
                 /* PROCESS TETRIS TICK */
                 if (vTetris.tick(keyboard)) {
@@ -54,6 +54,7 @@ int main() {
                 }
 
                 /* RENDER FRAME */
+                tEngine.updateSettings(keyboard);
                 tEngine.drawFrame();
                 nDrawnFrames++;
                 frameTime = 0;

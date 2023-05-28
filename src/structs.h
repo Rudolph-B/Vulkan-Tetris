@@ -77,14 +77,13 @@ struct SwapChainSupportDetails {
 };
 
 struct UniformBufferObject {
-    alignas(16) int model;
-    alignas(16) int ticks;
+    int model;
 };
 
 /**
  * @brief A struct to hold various keyboard input
  */
-struct KeyBoard {
+struct Keyboard {
     /* PIECE CONTROL */
     bool left = false;
     bool right = false;

@@ -70,6 +70,8 @@ public:
     void copyIndexBuffer();
     void updateVertices(const std::vector<Vertex> &nVertices);
 
+    void updateSettings(Keyboard keyboard);
+
 private:
     //<editor-fold desc="/* PRIVATE PARAMETERS */" defaultstate="collapsed">
     Window* window;
@@ -111,14 +113,15 @@ private:
     VkDeviceMemory vertexBufferMemory;
     VkBuffer vertexStagingBuffer;
     VkDeviceMemory vertexStagingBufferMemory;
-    VkDeviceSize vertexBufferSize = sizeof(Vertex) * 100;
+    VkDeviceSize vertexBufferSize = sizeof(Vertex) * 450;
 
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
     VkBuffer indexStagingBuffer;
     VkDeviceMemory indexStagingBufferMemory;
-    VkDeviceSize indexBufferSize = sizeof(uint32_t) * 100;
+    VkDeviceSize indexBufferSize = sizeof(uint32_t) * 450;
 
+    UniformBufferObject uniformBufferObject = {0};
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
     std::vector<void*> uniformBuffersMapped;
@@ -150,9 +153,7 @@ private:
     void createGraphicsPipeline();
     void createFramebuffers();
     void createCommandPool();
-    void createColorResources();
     VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
-    void createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 
     void createVertexBuffer();
     void createIndexBuffer();
@@ -183,7 +184,6 @@ private:
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
 
     void cleanVertexBuffer();
-
     void cleanIndexBuffer();
 };
 

@@ -18,7 +18,7 @@ public:
     //<editor-fold desc="/* PUBLIC METHODS */" defaultstate="collapsed">
     Tetris();
     ~Tetris();
-    bool tick(KeyBoard keyboard);
+    bool tick(Keyboard keyboard);
     std::vector<Vertex> getVertices();
     //</editor-fold>
 
@@ -48,6 +48,8 @@ public:
         Z = 6
     };
     //</editor-fold>
+
+    int getTicks();
 
 private:
     //<editor-fold desc="/* PRIVATE CONSTANTS */" defaultstate="collapsed">

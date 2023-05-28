@@ -87,7 +87,7 @@ void Window::pollEvents() {
     }
 }
 
-KeyBoard Window::getKeyBoard() {
+Keyboard Window::getKeyboard() {
     return keyboard;
 }
 
