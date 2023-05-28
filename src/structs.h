@@ -15,9 +15,13 @@
 
 struct Vertex {
     glm::vec2 pos;
-    glm::int32_t type;
-    glm::int32_t age;
+    glm::int32_t type; // Colour
+    glm::int32_t age; // Placed/Not placed
 
+    /**
+     * Returns the binding description for the vertex and a shader
+     * @return
+     */
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
@@ -27,6 +31,10 @@ struct Vertex {
         return bindingDescription;
     }
 
+    /**
+     * Returns the attribute descriptions for the vertex
+     * @return
+     */
     static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
         std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
 
@@ -53,6 +61,9 @@ struct Vertex {
     }
 };
 
+/**
+ * Used to compute the hash of a Vertex object
+ */
 namespace std {
     template<> struct hash<Vertex> {
         size_t operator()(Vertex const& vertex) const {
@@ -60,6 +71,7 @@ namespace std {
         }
     };
 }
+
 
 struct QueueFamilyIndices {
     std::optional<uint32_t> graphicsFamily;
@@ -100,8 +112,7 @@ struct Keyboard {
     /* SHADER CONTROL */
     bool n1 = false;
     bool n2 = false;
-    bool n3 = false;
-    bool n4 = false;
+
 };
 
 #endif //VULKAN_TETRIS_STRUCTS_H

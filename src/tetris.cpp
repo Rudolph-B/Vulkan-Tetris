@@ -22,12 +22,24 @@ bool Tetris::tick(Keyboard keyboard) {
         start = true;
     }
 
+    // Increase speed on page up
+    if (keyboard.pageUp && nextSpeedUpdateTick < ticks) {
+        iDropTickDivider = std::max(0, std::min(iDropTickDivider - 1, 6));
+        nextSpeedUpdateTick = ticks + moveTickOffset;
+    }
+
+    // Increase speed on page up
+    if (keyboard.pageDown && nextSpeedUpdateTick < ticks) {
+        iDropTickDivider = std::max(0, std::min(iDropTickDivider + 1, 6));
+        nextSpeedUpdateTick = ticks + moveTickOffset;
+    }
+
     // Wait for enter to start
     if (!start) {
         return false;
     }
 
-    /* USER MOVE TETRIMINO */
+    //<editor-fold desc="/* USER MOVE TETRIMINO */" defaultstate="collapsed">
     if (keyboard.left && nextLeftTick < ticks) {
         if (canGoLeft()) {
             cursorX--;
@@ -69,9 +81,10 @@ bool Tetris::tick(Keyboard keyboard) {
             state_changed = true;
         }
     }
+    //</editor-fold>
 
     // Check if the game should move the tetrimino down
-    if (((ticks % dropTickDivider) != 1)) {
+    if (((ticks % dropTickDivider[iDropTickDivider]) != 1)) {
         return state_changed;
     }
 
@@ -132,6 +145,9 @@ std::vector<Vertex> Tetris::getVertices() {
     return vertices;
 }
 
+/**
+ * @return
+ */
 Tetris::Tetris() {
     // Set random seed
     srand(time(nullptr));
@@ -140,6 +156,9 @@ Tetris::Tetris() {
     clearBoard();
 }
 
+/**
+ * @return
+ */
 Tetris::~Tetris() = default;
 
 /**
@@ -332,6 +351,10 @@ void Tetris::clearBoard() {
     nextDownTick = 0;
     nextUpTick = 0;
     nextSpaceTick = 0;
+    nextSpeedUpdateTick = 0;
+
+    // Reset Speed
+    iDropTickDivider = 0;
 
     // Clear board
     for (auto &row: board) {

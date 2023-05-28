@@ -10,24 +10,19 @@
 #include "constants.h"
 #include "structs.h"
 
-
 class Window {
 public:
     Window();
     ~Window();
+    bool shouldClose() const;
+    void pollEvents();
+    Keyboard getKeyboard();
+    void clearEvents();
 
     GLFWwindow* glfwWindow;
 
-    bool shouldClose() const;
-
-    void pollEvents();
-
-    KeyBoard getKeyBoard();
-
-    void clearEvents();
-
 private:
-    KeyBoard keyboard = {GLFW_RELEASE};
+    Keyboard keyboard = {GLFW_RELEASE};
     const int KEYS[13] = {
         GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_DOWN, GLFW_KEY_UP, GLFW_KEY_SPACE,
         GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN, GLFW_KEY_ENTER, GLFW_KEY_ESCAPE,

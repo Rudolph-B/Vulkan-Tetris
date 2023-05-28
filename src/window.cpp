@@ -9,7 +9,7 @@ Window::Window() {
     glfwInit();
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     glfwWindow = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan-Tetris", nullptr, nullptr);
     glfwSetWindowUserPointer(glfwWindow, this);
@@ -27,6 +27,7 @@ Window::~Window() {
 }
 
 bool Window::shouldClose() const {
+    /* CHECK FOR WINDOW CLOSE */
     if (keyboard.esc) {
         return true;
     }
@@ -34,10 +35,14 @@ bool Window::shouldClose() const {
     return glfwWindowShouldClose(glfwWindow);
 }
 
+/**
+ * Polls for events and updates the keyboard struct.
+ */
 void Window::pollEvents() {
     /* CHECK FOR WINDOW UPDATES */
     glfwPollEvents();
 
+    /* CHECK FOR KEYBOARD INPUT */
     for (auto & key : KEYS) {
         if (glfwGetKey(glfwWindow, key) == GLFW_PRESS) {
             switch (key) {
@@ -74,12 +79,6 @@ void Window::pollEvents() {
                 case GLFW_KEY_2:
                     keyboard.n2 = true;
                     break;
-                case GLFW_KEY_3:
-                    keyboard.n3 = true;
-                    break;
-                case GLFW_KEY_4:
-                    keyboard.n4 = true;
-                    break;
                 default:
                     break;
             }
@@ -91,6 +90,9 @@ Keyboard Window::getKeyboard() {
     return keyboard;
 }
 
+/**
+ * Clears the keyboard struct.
+ */
 void Window::clearEvents() {
     keyboard = {GLFW_RELEASE};
 }

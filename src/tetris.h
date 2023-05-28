@@ -291,8 +291,10 @@ private:
     //<editor-fold desc="/* PRIVATE VARIABLES */" defaultstate="collapsed">
     // Keeps track of the number of ticks since the game started
     int ticks{};
-    // Piece moves down every 0.5s (60 ticks per second / 30 ticks per drop)
-    int dropTickDivider = 30;
+    // Default piece moves down every 0.5s (60 ticks per second / 30 ticks per drop)
+    const int dropTickDivider[7] = {8,12,20,30,45,80, 120};
+    int iDropTickDivider = 3;
+
     // Use to delay certain user moves
     int moveTickOffset = 3;
     int nextLeftTick = 0;
@@ -300,6 +302,7 @@ private:
     int nextDownTick = 0;
     int nextUpTick = 0;
     int nextSpaceTick = 0;
+    int nextSpeedUpdateTick = 0;
 
     // Score
     int64_t score{};

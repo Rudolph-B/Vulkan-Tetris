@@ -11,10 +11,6 @@
 const int WIDTH = 400;
 const int HEIGHT = 800;
 
-/* MODEL AND TEXTURE PATHS */
-const std::string MODEL_PATH = "mdl/temp.obj";
-const std::string TEXTURE_PATH = "tex/temp.png";
-
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
 /* ENABLES/DISABLES VALIDATION LAYERS*/
