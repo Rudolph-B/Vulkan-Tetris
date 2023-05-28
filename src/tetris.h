@@ -10,23 +10,23 @@
 class Tetris {
 public:
     //<editor-fold desc="/* PUBLIC CONSTANTS */" defaultstate="collapsed">
-    static const int M_HEIGHT = 20;
-    static const int M_WIDTH = 10;
+    // Board dimensions
+    static const int B_HEIGHT = 20;
+    static const int B_WIDTH = 10;
     //</editor-fold>
 
     //<editor-fold desc="/* PUBLIC METHODS */" defaultstate="collapsed">
     Tetris();
-
     ~Tetris();
-
     bool tick(KeyBoard keyboard);
-
     std::vector<Vertex> getVertices();
     //</editor-fold>
 
     //<editor-fold desc="/* PUBLIC VARIABLES */" defaultstate="collapsed">
     //</editor-fold>
 
+    //<editor-fold desc="/* PUBLIC ENUMS */" defaultstate="collapsed">
+    // Used to represent the colour of a tetrimino
     enum Colour {
         NONE = 0,
         RED = 1,
@@ -37,6 +37,7 @@ public:
         PURPLE = 6
     };
 
+    // Used to represent the type of tetrimino
     enum Tetriminos {
         I = 0,
         J = 1,
@@ -46,10 +47,12 @@ public:
         T = 5,
         Z = 6
     };
+    //</editor-fold>
 
 private:
     //<editor-fold desc="/* PRIVATE CONSTANTS */" defaultstate="collapsed">
-    //<editor-fold desc="/* TETRIMINO ROTATIONS */" defaultstate="collapsed">
+
+    //<editor-fold desc="/* TETRIMINO ROTATIONS CONSTANTS */" defaultstate="collapsed">
     //<editor-fold desc="/* O_ROTATIONS */" defaultstate="collapsed">
     const int8_t O_ROTATIONS[4][4][4] = {
             {
@@ -254,6 +257,8 @@ private:
     //</editor-fold>
 
     //</editor-fold>
+
+    // Lookup table containing all possible tetrimino position
     const int8_t (*const TETRIMINO_SHAPES[7])[4][4][4] = {
         &I_ROTATIONS,
         &J_ROTATIONS,
@@ -268,52 +273,47 @@ private:
 
     //<editor-fold desc="/* PRIVATE METHODS */" defaultstate="collapsed">
     static std::vector<Vertex> buildVertices(int i, int j, Colour c);
-
     void placeTetrimino();
-
     bool canGoDown();
-
     void newTetrimino();
-
     bool canGoHere(int8_t x, int8_t y, int r = 0);
-
+    bool canGoLeft();
+    bool canGoRight();
+    void rotateLeft();
     void clearRows();
-
     void clearBoard();
+    static Colour randomColour();
+    static Tetriminos randomTetrimino();
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE VARIABLES */" defaultstate="collapsed">
+    // Keeps track of the number of ticks since the game started
+    int ticks{};
+    // Piece moves down every 0.5s (60 ticks per second / 30 ticks per drop)
     int dropTickDivider = 30;
+    // Use to delay certain user moves
     int moveTickOffset = 3;
-    Colour board[M_WIDTH][M_HEIGHT + 4] = {Colour::NONE};
-    bool start = false;
-
-    int64_t score;
-    int64_t ticks;
-    int8_t cursor_x;
-    int8_t cursor_y;
-    Colour cursor_colour;
-    int cursor_rotation;
-    Tetriminos cursor_tetrimino;
-
     int nextLeftTick = 0;
     int nextRightTick = 0;
     int nextDownTick = 0;
     int nextUpTick = 0;
     int nextSpaceTick = 0;
 
+    // Score
+    int64_t score{};
+    // Add space to the top off the board to allow for tetriminos to spawn
+    Colour board[B_WIDTH][B_HEIGHT + 4] = {Colour::NONE};
+    bool start = false;
+
+    // Current tetrimino
+    int8_t cursorX{};
+    int8_t cursorY{};
+    Colour cursorColour;
+    int cursorRotation{};
+    Tetriminos cursorTetrimino;
+
     //</editor-fold>
 
-    static Colour randomColour();
-    static Tetriminos randomTetrimino();
-
-    bool canGoLeft();
-
-    bool canGoRight();
-
-    void rotateLeft();
-
-    void rotateRight();
 };
 
 #endif //VULKAN_TETRIS_TETRIS_H
