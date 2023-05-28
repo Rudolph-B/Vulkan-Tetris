@@ -111,7 +111,7 @@ std::vector<Vertex> Tetris::getVertices() {
             if (board[i][j]) {
 
                 /* PUSH VERTICES FOR EACH CORNER OF THE BLOCK */
-                std::vector<Vertex> newVertices = buildVertices(i, j, board[i][j]);
+                std::vector<Vertex> newVertices = buildVertices(i, j, board[i][j], 0);
                 vertices.insert(std::end(vertices), std::begin(newVertices), std::end(newVertices));
             }
         }
@@ -123,7 +123,7 @@ std::vector<Vertex> Tetris::getVertices() {
 
             /* ADD VERTICES IF BLOCK IS NOT EMPTY */
             if ((*TETRIMINO_SHAPES[cursorTetrimino])[cursorRotation][x][y]) {
-                std::vector<Vertex> newVertices = buildVertices(cursorX + x, cursorY + y, cursorColour);
+                std::vector<Vertex> newVertices = buildVertices(cursorX + x, cursorY + y, cursorColour, 1);
                 vertices.insert(std::end(vertices), std::begin(newVertices), std::end(newVertices));
             }
         }
@@ -150,14 +150,14 @@ Tetris::~Tetris() = default;
  * @param c
  * @return
  */
-std::vector<Vertex> Tetris::buildVertices(int i, int j, Colour c) {
+std::vector<Vertex> Tetris::buildVertices(int i, int j, Colour c, int age) {
     return {
-            {{(float) i / (float) B_WIDTH,       (float) j / (float) B_HEIGHT},       {0, 0}, c},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       {0, 0}, c},
-            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, {0, 0}, c},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) (j + 1) / (float) B_HEIGHT}, {0, 0}, c},
-            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, {0, 0}, c},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       {0, 0}, c}
+            {{(float) i / (float) B_WIDTH,       (float) j / (float) B_HEIGHT},       c, age},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       c, age},
+            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, c, age},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) (j + 1) / (float) B_HEIGHT}, c, age},
+            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, c, age},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       c, age}
     };
 }
 

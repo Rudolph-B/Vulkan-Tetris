@@ -15,8 +15,8 @@
 
 struct Vertex {
     glm::vec2 pos;
-    glm::vec2 tex;
     glm::int32_t type;
+    glm::int32_t age;
 
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
@@ -37,26 +37,26 @@ struct Vertex {
 
         attributeDescriptions[1].binding = 0;
         attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, tex);
+        attributeDescriptions[1].format = VK_FORMAT_R32_UINT;
+        attributeDescriptions[1].offset = offsetof(Vertex, type);
 
         attributeDescriptions[2].binding = 0;
         attributeDescriptions[2].location = 2;
         attributeDescriptions[2].format = VK_FORMAT_R32_UINT;
-        attributeDescriptions[2].offset = offsetof(Vertex, type);
+        attributeDescriptions[2].offset = offsetof(Vertex, age);
 
         return attributeDescriptions;
     }
 
     bool operator==(const Vertex& other) const {
-        return pos == other.pos && type == other.type && tex == other.tex;
+        return pos == other.pos && type == other.type && age == other.age;
     }
 };
 
 namespace std {
     template<> struct hash<Vertex> {
         size_t operator()(Vertex const& vertex) const {
-            return ((hash<glm::vec2>()(vertex.pos) ^ (hash<glm::int16>()(vertex.type) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.tex) << 1);
+            return ((hash<glm::vec2>()(vertex.pos) ^ (hash<glm::int16>()(vertex.type) << 1)) >> 1) ^ (hash<glm::int16>()(vertex.age) << 1);
         }
     };
 }
@@ -77,11 +77,13 @@ struct SwapChainSupportDetails {
 };
 
 struct UniformBufferObject {
-    alignas(16) glm::mat4 model;
-    alignas(16) glm::mat4 view;
-    alignas(16) glm::mat4 proj;
+    alignas(16) int model;
+    alignas(16) int ticks;
 };
 
+/**
+ * @brief A struct to hold various keyboard input
+ */
 struct KeyBoard {
     /* PIECE CONTROL */
     bool left = false;

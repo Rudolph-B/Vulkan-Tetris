@@ -64,17 +64,10 @@ public:
     ~Engine();
 
     bool framebufferResized = false;
-
     void waitDeviceIdle();
-
     void drawFrame();
-
-    bool loadModel(const std::vector<Vertex>& raw_vertices);
-
     void copyVertexBuffer();
-
     void copyIndexBuffer();
-
     void updateVertices(const std::vector<Vertex> &nVertices);
 
 private:
@@ -110,11 +103,6 @@ private:
     VkImage colorImage;
     VkDeviceMemory colorImageMemory;
     VkImageView colorImageView;
-
-    VkImage textureImage;
-    VkDeviceMemory textureImageMemory;
-    VkImageView textureImageView;
-    VkSampler textureSampler;
 
     std::vector<Vertex> objVertices;
     std::vector<uint32_t> objIndices;
@@ -163,14 +151,8 @@ private:
     void createFramebuffers();
     void createCommandPool();
     void createColorResources();
-    void createTextureImage();
-    VkSampleCountFlagBits getMaxUsableSampleCount();
-    void createTextureImageView();
-    void createTextureSampler();
     VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
     void createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-    void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
-    void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
 
     void createVertexBuffer();
     void createIndexBuffer();

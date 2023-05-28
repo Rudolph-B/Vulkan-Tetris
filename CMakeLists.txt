@@ -20,13 +20,6 @@ target_link_libraries(${PROJECT_NAME} glfw)
 
 set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
 
-add_custom_target(Textures ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/tex ${PROJECT_BINARY_DIR}/tex
-)
-
-add_custom_target(Models ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/mdl ${PROJECT_BINARY_DIR}/mdl
-)
 file(GLOB_RECURSE GLSL_SOURCE_FILES
     "shd/*.frag"
     "shd/*.vert"
@@ -51,13 +44,9 @@ add_custom_target(
 )
 
 add_dependencies(Vulkan-Tetris Shaders)
-add_dependencies(Vulkan-Tetris Textures)
-add_dependencies(Vulkan-Tetris Models)
 
 add_custom_command(TARGET Vulkan-Tetris POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Vulkan-Tetris>/shd/"
-    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Vulkan-Tetris>/tex/"
-    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Vulkan-Tetris>/mdl/"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/shd" "$<TARGET_FILE_DIR:Vulkan-Tetris>/shd"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/tex" "$<TARGET_FILE_DIR:Vulkan-Tetris>/tex"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/mdl" "$<TARGET_FILE_DIR:Vulkan-Tetris>/mdl"

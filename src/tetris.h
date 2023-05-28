@@ -272,7 +272,7 @@ private:
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE METHODS */" defaultstate="collapsed">
-    static std::vector<Vertex> buildVertices(int i, int j, Colour c);
+    static std::vector<Vertex> buildVertices(int i, int j, Colour c, int age);
     void placeTetrimino();
     bool canGoDown();
     void newTetrimino();
