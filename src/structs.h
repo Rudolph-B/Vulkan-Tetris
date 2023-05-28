@@ -82,5 +82,25 @@ struct UniformBufferObject {
     alignas(16) glm::mat4 proj;
 };
 
+struct KeyBoard {
+    /* PIECE CONTROL */
+    bool left = false;
+    bool right = false;
+    bool up = false;
+    bool down = false;
+    bool space = false;
+
+    /* GAME CONTROL */
+    bool pageUp = false;
+    bool pageDown = false;
+    bool esc = false;
+    bool enter = false;
+
+    /* SHADER CONTROL */
+    bool n1 = false;
+    bool n2 = false;
+    bool n3 = false;
+    bool n4 = false;
+};
 
 #endif //VULKAN_TETRIS_STRUCTS_H

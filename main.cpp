@@ -38,25 +38,29 @@ int main() {
             frameTime += frameDuration.count();
             startTime = endTime;
 
-            /* CHECK FOR WINDOW UPDATES */
-            glfwPollEvents();
+
+            /* PROCESS INPUT */
+            gWindow.pollEvents();
 
             //<editor-fold desc="/* FORCE FRAME/TICK RATE */" defaultstate="collapsed">
             if (frameTime >= targetFrameTime) {
+                KeyBoard keyboard = gWindow.getKeyBoard();
+
                 /* PROCESS TETRIS TICK */
-                if (vTetris.tick()) {
+                if (vTetris.tick(keyboard)) {
                     /* IF TETRIS STATE CHANGED */
 
                     /* UPDATE VERTEXES */
-                    tEngine.updateVertices(vTetris.getVertices());
+                    tEngine.updateVertices(vTetris.getVertices(), keyboard);
                 }
 
                 /* RENDER FRAME */
                 tEngine.drawFrame();
                 nDrawnFrames++;
-
-                /* RESET FRAME TARGET */
                 frameTime = 0;
+
+                /* CLEAR EVENTS */
+                gWindow.clearEvents();
             }
             //</editor-fold>
 

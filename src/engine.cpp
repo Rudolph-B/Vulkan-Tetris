@@ -1429,7 +1429,7 @@ void Engine::waitDeviceIdle() {
     vkDeviceWaitIdle(device);
 }
 
-void Engine::updateVertices(const std::vector<Vertex> &nVertices) {
+void Engine::updateVertices(const std::vector<Vertex> &nVertices, KeyBoard keyboard) {
     /* CLEAN INDICES AND VERTICES */
     objIndices.clear();
     objVertices.clear();

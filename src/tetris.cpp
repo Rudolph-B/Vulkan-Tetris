@@ -5,16 +5,29 @@
 #include <iostream>
 #include "tetris.h"
 
-bool Tetris::tick() {
+bool Tetris::tick(KeyBoard keyboard) {
     ticks++;
 
-    if ((ticks % tickDivider) != 1) {
+    if ((ticks % moveTickDivider) != 1) {
+
+    }
+
+    if ((ticks % dropTickDivider) != 1) {
         return false;
     }
 
     if (!canGoDown()) {
         placeTetrimino();
         newTetrimino();
+
+        // Check cleared rows
+        clearRows();
+
+        // Check for game over
+        if (!canGoDown()) {
+            clearBoard();
+            return false;
+        }
     }
     cursor_y--;
 
@@ -47,25 +60,11 @@ std::vector<Vertex> Tetris::getVertices() {
 }
 
 Tetris::Tetris() {
-    // Select random tetrimino
-    score = 0;
     ticks = 0;
+    srand(time(nullptr));
+
     newTetrimino();
-
-    board[0][0] = Colour::BLUE;
-    board[0][1] = Colour::BLUE;
-    board[1][0] = Colour::BLUE;
-    board[2][0] = Colour::BLUE;
-
-    board[2][1] = Colour::RED;
-    board[3][1] = Colour::RED;
-    board[3][0] = Colour::RED;
-    board[4][0] = Colour::RED;
-
-    board[3][15] = Colour::GREEN;
-    board[3][14] = Colour::GREEN;
-    board[3][13] = Colour::GREEN;
-    board[3][12] = Colour::GREEN;
+    clearBoard();
 }
 
 Tetris::~Tetris() {
@@ -89,16 +88,22 @@ void Tetris::placeTetrimino() {
         uint8_t y = cursor_y + TETRIMINO_SHAPES[cursor_tetrimino][i][1];
         board[x][y] = cursor_colour;
     }
+
+    score += 10;
 }
 
 bool Tetris::canGoDown() {
+    return canGoHere(0, -1);
+}
+
+bool Tetris::canGoHere(int8_t x, int8_t y) {
     for (int i = 0; i < 4; i++) {
-        uint8_t x = cursor_x + TETRIMINO_SHAPES[cursor_tetrimino][i][0];
-        uint8_t y = cursor_y + TETRIMINO_SHAPES[cursor_tetrimino][i][1] - 1;
-        if (y < 0) {
+        int8_t bx = cursor_x + TETRIMINO_SHAPES[cursor_tetrimino][i][0] + x;
+        int8_t by = cursor_y + TETRIMINO_SHAPES[cursor_tetrimino][i][1] + y;
+        if (by < 0 | bx < 0 | bx >= M_WIDTH) {
             return false;
         }
-        if (board[x][y]) {
+        if (board[bx][by]) {
             return false;
         }
     }
@@ -107,7 +112,101 @@ bool Tetris::canGoDown() {
 
 void Tetris::newTetrimino() {
     cursor_x = M_WIDTH / 2;
-    cursor_tetrimino = (Tetriminos)(rand() % 7);
-    cursor_colour = (Colour)(rand() % 6 + 1);
+    cursor_tetrimino = randomTetrimino();
+    cursor_colour = randomColour();
     cursor_y = M_HEIGHT - 1;
+}
+
+void Tetris::clearRows() {
+    uint8_t nClears = 0;
+    for (int i = 0; i < M_HEIGHT; i++) {
+        bool rowFull = true;
+        for (auto & row : board) {
+            if (!row[i]) {
+                rowFull = false;
+                break;
+            }
+        }
+        if (rowFull) {
+            for (auto & row : board) {
+                row[i] = Colour::NONE;
+            }
+            for (int j = i; j < M_HEIGHT - 1; j++) {
+                for (auto & k : board) {
+                    k[j] = k[j + 1];
+                }
+            }
+            i--;
+            nClears++;
+        }
+    }
+
+    switch (nClears) {
+        case 1:
+            score += 100;
+            break;
+        case 2:
+            score += 300;
+            break;
+        case 3:
+            score += 600;
+            break;
+        case 4:
+            score += 1000;
+            break;
+        default :
+            break;
+    }
+}
+
+void Tetris::clearBoard() {
+    score = 0;
+
+    for (auto & row : board) {
+        for (auto & cell : row) {
+            cell = Colour::NONE;
+        }
+    }
+}
+
+Tetris::Colour Tetris::randomColour() {
+    static std::vector<Colour> bag = {
+            Colour::RED, Colour::GREEN, Colour::BLUE, Colour::YELLOW, Colour::ORANGE, Colour::PURPLE
+    };
+
+    int index = rand() % bag.size();
+    Colour colour = bag[index];
+
+    // Remove the chosen colour from the bag
+    bag.erase(bag.begin() + index);
+
+    // Refill the bag if it becomes empty
+    if (bag.empty()) {
+        bag = {
+            Colour::RED, Colour::GREEN, Colour::BLUE, Colour::YELLOW, Colour::ORANGE, Colour::PURPLE
+        };
+    }
+
+    return colour;
+}
+
+Tetris::Tetriminos Tetris::randomTetrimino() {
+    static std::vector<Tetriminos> bag = {
+            Tetriminos::I, Tetriminos::J, Tetriminos::L, Tetriminos::O, Tetriminos::S, Tetriminos::T, Tetriminos::Z
+    };
+
+    int index = rand() % bag.size();
+    Tetriminos tetrimino = bag[index];
+
+    // Remove the chosen colour from the bag
+    bag.erase(bag.begin() + index);
+
+    // Refill the bag if it becomes empty
+    if (bag.empty()) {
+        bag = {
+            Tetriminos::I, Tetriminos::J, Tetriminos::L, Tetriminos::O, Tetriminos::S, Tetriminos::T, Tetriminos::Z
+        };
+    }
+
+    return tetrimino;
 }

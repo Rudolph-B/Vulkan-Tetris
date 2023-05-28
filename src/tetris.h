@@ -19,7 +19,7 @@ public:
 
     ~Tetris();
 
-    bool tick();
+    bool tick(KeyBoard keyboard);
 
     std::vector<Vertex> getVertices();
     //</editor-fold>
@@ -62,20 +62,6 @@ private:
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE METHODS */" defaultstate="collapsed">
-    //</editor-fold>
-
-    //<editor-fold desc="/* PRIVATE VARIABLES */" defaultstate="collapsed">
-    int tickDivider = 15;
-    Colour board[M_WIDTH][M_HEIGHT] = {Colour::NONE};
-
-    int64_t score;
-    int64_t ticks;
-    int8_t cursor_x;
-    int8_t cursor_y;
-    Colour cursor_colour;
-    Tetriminos cursor_tetrimino;
-
-    //</editor-fold>
     static std::vector<Vertex> buildVertices(int i, int j, Colour c);
 
     void placeTetrimino();
@@ -83,6 +69,29 @@ private:
     bool canGoDown();
 
     void newTetrimino();
+
+    bool canGoHere(int8_t x, int8_t y);
+
+    void clearRows();
+
+    void clearBoard();
+    //</editor-fold>
+
+    //<editor-fold desc="/* PRIVATE VARIABLES */" defaultstate="collapsed">
+    int dropTickDivider = 30;
+    int moveTickDivider = 3;
+    Colour board[M_WIDTH][M_HEIGHT + 2] = {Colour::NONE};
+
+    int64_t score;
+    int64_t ticks;
+    int8_t cursor_x;
+    int8_t cursor_y;
+    Colour cursor_colour;
+    Tetriminos cursor_tetrimino;
+    //</editor-fold>
+
+    static Colour randomColour();
+    static Tetriminos randomTetrimino();
 };
 
 

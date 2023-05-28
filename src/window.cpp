@@ -27,5 +27,70 @@ Window::~Window() {
 }
 
 bool Window::shouldClose() const {
+    if (keyboard.esc) {
+        return true;
+    }
+
     return glfwWindowShouldClose(glfwWindow);
+}
+
+void Window::pollEvents() {
+    /* CHECK FOR WINDOW UPDATES */
+    glfwPollEvents();
+
+    for (auto & key : KEYS) {
+        if (glfwGetKey(glfwWindow, key) == GLFW_PRESS) {
+            switch (key) {
+                case GLFW_KEY_LEFT:
+                    keyboard.left = true;
+                    break;
+                case GLFW_KEY_RIGHT:
+                    keyboard.right = true;
+                    break;
+                case GLFW_KEY_DOWN:
+                    keyboard.down = true;
+                    break;
+                case GLFW_KEY_UP:
+                    keyboard.up = true;
+                    break;
+                case GLFW_KEY_SPACE:
+                    keyboard.space = true;
+                    break;
+                case GLFW_KEY_PAGE_UP:
+                    keyboard.pageUp = true;
+                    break;
+                case GLFW_KEY_PAGE_DOWN:
+                    keyboard.pageDown = true;
+                    break;
+                case GLFW_KEY_ENTER:
+                    keyboard.enter = true;
+                    break;
+                case GLFW_KEY_ESCAPE:
+                    keyboard.esc = true;
+                    break;
+                case GLFW_KEY_1:
+                    keyboard.n1 = true;
+                    break;
+                case GLFW_KEY_2:
+                    keyboard.n2 = true;
+                    break;
+                case GLFW_KEY_3:
+                    keyboard.n3 = true;
+                    break;
+                case GLFW_KEY_4:
+                    keyboard.n4 = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+KeyBoard Window::getKeyBoard() {
+    return keyboard;
+}
+
+void Window::clearEvents() {
+    keyboard = {GLFW_RELEASE};
 }
