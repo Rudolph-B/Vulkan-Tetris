@@ -17,9 +17,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/hash.hpp"
 
-#include "stb_image.h"
-
-#include "tiny_obj_loader.h"
 //</editor-fold>
 
 #include "structs.h"
@@ -46,13 +43,14 @@
 
 class Engine {
 public:
-    //<editor-fold desc="/* CONSTANTS */" defaultstate="collapsed">
+    //<editor-fold desc="/* PUBLIC CONSTANTS */" defaultstate="collapsed">
 
     /* SPECIFY WHICH VALIDATION LAYERS TO ENABLE */
     const std::vector<const char*> validationLayers = {
             "VK_LAYER_KHRONOS_validation"
     };
 
+    /* SPECIFY WHICH DEVICE EXTENSIONS TO ENABLE */
     const std::vector<const char*> deviceExtensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
@@ -60,6 +58,7 @@ public:
 
     //</editor-fold>
 
+    //<editor-fold desc="/* PUBLIC FUNCTIONS */" defaultstate="collapsed">
     explicit Engine(Window *window);
     ~Engine();
 
@@ -69,9 +68,8 @@ public:
     void copyVertexBuffer();
     void copyIndexBuffer();
     void updateVertices(const std::vector<Vertex> &nVertices);
-
     void updateSettings(Keyboard keyboard);
-
+    //</editor-fold>
 private:
     //<editor-fold desc="/* PRIVATE PARAMETERS */" defaultstate="collapsed">
     Window* window;
@@ -82,7 +80,6 @@ private:
     VkSurfaceKHR surface;
 
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-    VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
     VkDevice device;
 
     VkQueue graphicsQueue;
@@ -101,10 +98,6 @@ private:
     VkPipeline graphicsPipeline;
 
     VkCommandPool commandPool;
-
-    VkImage colorImage;
-    VkDeviceMemory colorImageMemory;
-    VkImageView colorImageView;
 
     std::vector<Vertex> objVertices;
     std::vector<uint32_t> objIndices;
@@ -138,15 +131,17 @@ private:
 
     //</editor-fold>
 
+    //<editor-fold desc="/* PRIVATE METHODS */" defaultstate="collapsed">
+    void createSwapChain();
     void cleanupSwapChain();
     void recreateSwapChain();
+
     void createInstance();
     static void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     void setupDebugMessenger();
     void createSurface();
     void pickPhysicalDevice();
     void createLogicalDevice();
-    void createSwapChain();
     void createImageViews();
     void createRenderPass();
     void createDescriptorSetLayout();
@@ -174,7 +169,7 @@ private:
     static VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     static VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
-    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice p_device);
+    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice pDevice);
     bool isDeviceSuitable(VkPhysicalDevice p_device);
     bool checkDeviceExtensionSupport(VkPhysicalDevice p_device);
     QueueFamilyIndices findQueueFamilies(VkPhysicalDevice p_device);
@@ -185,6 +180,8 @@ private:
 
     void cleanVertexBuffer();
     void cleanIndexBuffer();
+    //</editor-fold>
+
 };
 
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);

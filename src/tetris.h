@@ -17,8 +17,11 @@ public:
 
     //<editor-fold desc="/* PUBLIC METHODS */" defaultstate="collapsed">
     Tetris();
+
     ~Tetris();
+
     bool tick(Keyboard keyboard);
+
     std::vector<Vertex> getVertices();
     //</editor-fold>
 
@@ -49,8 +52,6 @@ public:
     };
     //</editor-fold>
 
-    int getTicks();
-
 private:
     //<editor-fold desc="/* PRIVATE CONSTANTS */" defaultstate="collapsed">
 
@@ -60,26 +61,26 @@ private:
             {
                     {1, 1, 0, 0},
                     {1, 1, 0, 0},
-                    {0,  0, 0,0},
-                    {0,  0, 0,0}
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {1, 1, 0, 0},
                     {1, 1, 0, 0},
-                    {0,  0, 0,0},
-                    {0,  0, 0,0}
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {1, 1, 0, 0},
                     {1, 1, 0, 0},
-                    {0,  0, 0,0},
-                    {0,  0, 0,0}
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {1, 1, 0, 0},
                     {1, 1, 0, 0},
-                    {0,  0, 0,0},
-                    {0,  0, 0,0}
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
             }
     };
     //</editor-fold>
@@ -89,26 +90,26 @@ private:
             {
                     {0, 0, 0, 0},
                     {1, 1, 1, 1},
-                    {0,  0, 0,0},
-                    {0,  0, 0,0}
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {0, 1, 0, 0},
                     {0, 1, 0, 0},
-                    {0,  1, 0,0},
-                    {0,  1, 0,0}
+                    {0, 1, 0, 0},
+                    {0, 1, 0, 0}
             },
             {
                     {0, 0, 0, 0},
                     {1, 1, 1, 1},
-                    {0,  0, 0,0},
-                    {0,  0, 0,0}
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {0, 1, 0, 0},
                     {0, 1, 0, 0},
-                    {0,  1, 0,0},
-                    {0,  1, 0,0}
+                    {0, 1, 0, 0},
+                    {0, 1, 0, 0}
             }
     };
     //</editor-fold>
@@ -118,26 +119,26 @@ private:
             {
                     {1, 0, 0, 0},
                     {1, 1, 1, 0},
-                    {0,  0, 0,0},
-                    {0,  0, 0,0}
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {0, 1, 1, 0},
                     {0, 1, 0, 0},
-                    {0,  1, 0,0},
-                    {0,  0, 0,0}
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {0, 0, 0, 0},
                     {1, 1, 1, 0},
-                    {0,  0, 1,0},
-                    {0,  0, 0,0}
+                    {0, 0, 1, 0},
+                    {0, 0, 0, 0}
             },
             {
                     {0, 1, 0, 0},
                     {0, 1, 0, 0},
-                    {1,  1, 0,0},
-                    {0,  0, 0,0}
+                    {1, 1, 0, 0},
+                    {0, 0, 0, 0}
             }
     };
     //</editor-fold>
@@ -262,29 +263,40 @@ private:
 
     // Lookup table containing all possible tetrimino position
     const int8_t (*const TETRIMINO_SHAPES[7])[4][4][4] = {
-        &I_ROTATIONS,
-        &J_ROTATIONS,
-        &L_ROTATIONS,
-        &O_ROTATIONS,
-        &S_ROTATIONS,
-        &T_ROTATIONS,
-        &Z_ROTATIONS
+            &I_ROTATIONS,
+            &J_ROTATIONS,
+            &L_ROTATIONS,
+            &O_ROTATIONS,
+            &S_ROTATIONS,
+            &T_ROTATIONS,
+            &Z_ROTATIONS
     };
 
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE METHODS */" defaultstate="collapsed">
     static std::vector<Vertex> buildVertices(int i, int j, Colour c, int age);
+
     void placeTetrimino();
+
     bool canGoDown();
+
     void newTetrimino();
+
     bool canGoHere(int8_t x, int8_t y, int r = 0);
+
     bool canGoLeft();
+
     bool canGoRight();
+
     void rotateLeft();
+
     void clearRows();
+
     void clearBoard();
+
     static Colour randomColour();
+
     static Tetriminos randomTetrimino();
     //</editor-fold>
 
@@ -292,11 +304,11 @@ private:
     // Keeps track of the number of ticks since the game started
     int ticks{};
     // Default piece moves down every 0.5s (60 ticks per second / 30 ticks per drop)
-    const int dropTickDivider[7] = {8,12,20,30,45,80, 120};
+    const int dropTickDivider[7] = {8, 12, 20, 30, 45, 80, 120};
     int iDropTickDivider = 3;
 
     // Use to delay certain user moves
-    int moveTickOffset = 3;
+    int moveTickOffset = 8;
     int nextLeftTick = 0;
     int nextRightTick = 0;
     int nextDownTick = 0;
@@ -319,6 +331,7 @@ private:
 
     //</editor-fold>
 
+    [[nodiscard]] int calculateNextMoveTick(int oldNextMoveTick) const;
 };
 
 #endif //VULKAN_TETRIS_TETRIS_H

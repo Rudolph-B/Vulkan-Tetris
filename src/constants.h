@@ -16,6 +16,8 @@ const int MAX_FRAMES_IN_FLIGHT = 2;
 /* ENABLES/DISABLES VALIDATION LAYERS*/
 #ifdef NDEBUG
 const bool E_VALIDATION_LAYERS = false;
+// Disable on release builds
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #else
 const bool E_VALIDATION_LAYERS = true;
 #endif

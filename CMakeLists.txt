@@ -10,14 +10,15 @@ find_package(Vulkan REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 
-include_directories(lib)
-
+# GLM
 add_subdirectory(lib/glm)
 target_link_libraries(${PROJECT_NAME} glm)
 
+# GLFW
 add_subdirectory(lib/glfw)
 target_link_libraries(${PROJECT_NAME} glfw)
 
+# ---------------------- SHADERS ----------------------
 set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
 
 file(GLOB_RECURSE GLSL_SOURCE_FILES
@@ -25,6 +26,7 @@ file(GLOB_RECURSE GLSL_SOURCE_FILES
     "shd/*.vert"
 )
 
+# Complies shaders on change
 foreach (GLSL ${GLSL_SOURCE_FILES})
     get_filename_component(FILE_NAME ${GLSL} NAME)
     set(SPIRV "${PROJECT_BINARY_DIR}/shd/${FILE_NAME}.spv")
@@ -38,13 +40,16 @@ foreach (GLSL ${GLSL_SOURCE_FILES})
 
 endforeach (GLSL)
 
+# Adds the shaders as a project target
 add_custom_target(
     Shaders
     DEPENDS ${SPIRV_BINARY_FILES}
 )
 
+# Adds the shaders as a dependency of the main project
 add_dependencies(Vulkan-Tetris Shaders)
 
+# Copies the shaders to the build directory
 add_custom_command(TARGET Vulkan-Tetris POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Vulkan-Tetris>/shd/"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/shd" "$<TARGET_FILE_DIR:Vulkan-Tetris>/shd"

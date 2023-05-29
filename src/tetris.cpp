@@ -25,13 +25,13 @@ bool Tetris::tick(Keyboard keyboard) {
     // Increase speed on page up
     if (keyboard.pageUp && nextSpeedUpdateTick < ticks) {
         iDropTickDivider = std::max(0, std::min(iDropTickDivider - 1, 6));
-        nextSpeedUpdateTick = ticks + moveTickOffset;
+        nextSpeedUpdateTick = ticks + moveTickOffset * 3;
     }
 
     // Increase speed on page up
     if (keyboard.pageDown && nextSpeedUpdateTick < ticks) {
         iDropTickDivider = std::max(0, std::min(iDropTickDivider + 1, 6));
-        nextSpeedUpdateTick = ticks + moveTickOffset;
+        nextSpeedUpdateTick = ticks + moveTickOffset * 3;
     }
 
     // Wait for enter to start
@@ -40,43 +40,41 @@ bool Tetris::tick(Keyboard keyboard) {
     }
 
     //<editor-fold desc="/* USER MOVE TETRIMINO */" defaultstate="collapsed">
-    if (keyboard.left && nextLeftTick < ticks) {
+    if (keyboard.left && nextLeftTick <= ticks) {
         if (canGoLeft()) {
             cursorX--;
-            nextLeftTick = ticks + moveTickOffset;
+            nextLeftTick = calculateNextMoveTick(nextLeftTick);
             state_changed = true;
         }
     }
 
-    if (keyboard.right && nextRightTick < ticks) {
+    if (keyboard.right && nextRightTick <= ticks) {
         if (canGoRight()) {
             cursorX++;
-            nextRightTick = ticks + moveTickOffset;
+            nextRightTick = calculateNextMoveTick(nextRightTick);
             state_changed = true;
         }
     }
 
     // Drop tetrimino on space
-    if (keyboard.space && nextSpaceTick < ticks) {
+    if (keyboard.space && nextSpaceTick <= ticks) {
         while (canGoDown()) {
             cursorY--;
         }
-
-        nextLeftTick = ticks + moveTickOffset * 2;
-        return true;
+        nextSpaceTick = calculateNextMoveTick(nextSpaceTick) + 4;
     }
 
     // Rotate tetrimino on up
-    if (keyboard.up && nextUpTick < ticks) {
+    if (keyboard.up && nextUpTick <= ticks) {
         rotateLeft();
-        nextUpTick = ticks + moveTickOffset * 3;
+        nextUpTick = calculateNextMoveTick(nextUpTick) + 4;
         state_changed = true;
     }
 
     // Move tetrimino down
-    if (keyboard.down && nextDownTick < ticks) {
+    if (keyboard.down && nextDownTick <= ticks) {
         if (canGoDown()) {
-            nextDownTick = ticks + moveTickOffset;
+            nextDownTick = calculateNextMoveTick(nextDownTick);
             cursorY--;
             state_changed = true;
         }
@@ -109,6 +107,24 @@ bool Tetris::tick(Keyboard keyboard) {
     // Move tetrimino down
     cursorY--;
     return true;
+}
+
+/**
+ * Checks for button holds and speeds up movement if true
+ *
+ * @param ticks
+ * @param oldNextMoveTick
+ * @return Next tick to move tetrimino
+ */
+int Tetris::calculateNextMoveTick(int oldNextMoveTick) const {// Check for button hold
+    if (oldNextMoveTick == ticks) {
+        // Allow faster movement if held
+        oldNextMoveTick = ticks + moveTickOffset / 3;
+    } else {
+        oldNextMoveTick = ticks + moveTickOffset;
+    }
+
+    return oldNextMoveTick;
 }
 
 /**
@@ -211,6 +227,28 @@ void Tetris::placeTetrimino() {
  */
 void Tetris::rotateLeft() {
     if (canGoHere(0, 0, 1)) {
+        cursorRotation = (cursorRotation + 1) % 4;
+    }
+    // Check if the tetrimino can be moved left
+    else if (canGoHere(-1, 0, 1)) {
+        cursorX--;
+        cursorRotation = (cursorRotation + 1) % 4;
+    }
+    // Check if the tetrimino can be moved right
+    else if (canGoHere(1, 0, 1)) {
+        cursorX++;
+        cursorRotation = (cursorRotation + 1) % 4;
+    }
+    // Check if the tetrimino can be moved left
+    else if (canGoHere(-2, 0, 1)) {
+        cursorX--;
+        cursorX--;
+        cursorRotation = (cursorRotation + 1) % 4;
+    }
+    // Check if the tetrimino can be moved right
+    else if (canGoHere(2, 0, 1)) {
+        cursorX++;
+        cursorX++;
         cursorRotation = (cursorRotation + 1) % 4;
     }
 }
@@ -354,7 +392,7 @@ void Tetris::clearBoard() {
     nextSpeedUpdateTick = 0;
 
     // Reset Speed
-    iDropTickDivider = 0;
+    iDropTickDivider = 3;
 
     // Clear board
     for (auto &row: board) {
@@ -418,8 +456,4 @@ Tetris::Tetriminos Tetris::randomTetrimino() {
     }
 
     return tetrimino;
-}
-
-int Tetris::getTicks() {
-    return ticks;
 }
