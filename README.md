@@ -3,7 +3,7 @@
 This is a very rudimentary Tetris clone written in C++ using the Vulkan API. It is missing some features, 
 such as a game-over screen, score, control and music.
 
-I wrote this over a period of 2 days (26-28 May 2023) as a means to show I have a decent understanding of graphics pipelines.
+I wrote this over a weekend as a means to show I have a decent understanding of graphics pipelines.
 Although it is rushed I am proud of the code I have written and I hope you enjoy it.
 
 ## Controls
