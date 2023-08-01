@@ -8,28 +8,28 @@
 /**
  * Process a tetris tick
  *
- * @param keyboard
+ * @param action
  * @return
  */
-bool Tetris::tick(Keyboard keyboard) {
+bool Tetris::tick(Action action) {
     ticks++;
     bool state_changed = false;
 
     // Reset game on enter
-    if (keyboard.enter) {
+    if (action.enter == press) {
         newTetrimino();
         clearBoard();
         start = true;
     }
 
-    // Increase speed on page up
-    if (keyboard.pageUp && nextSpeedUpdateTick < ticks) {
+    // Increase speed on page rotate_left
+    if (action.pageUp == press && nextSpeedUpdateTick < ticks) {
         iDropTickDivider = std::max(0, std::min(iDropTickDivider - 1, 6));
         nextSpeedUpdateTick = ticks + moveTickOffset * 3;
     }
 
-    // Increase speed on page up
-    if (keyboard.pageDown && nextSpeedUpdateTick < ticks) {
+    // Increase speed on page rotate_left
+    if (action.pageDown == press && nextSpeedUpdateTick < ticks) {
         iDropTickDivider = std::max(0, std::min(iDropTickDivider + 1, 6));
         nextSpeedUpdateTick = ticks + moveTickOffset * 3;
     }
@@ -40,7 +40,14 @@ bool Tetris::tick(Keyboard keyboard) {
     }
 
     //<editor-fold desc="/* USER MOVE TETRIMINO */" defaultstate="collapsed">
-    if (keyboard.left && nextLeftTick <= ticks) {
+    if (action.left == press) {
+        if (canGoLeft()) {
+            cursorX--;
+            state_changed = true;
+        }
+    }
+
+    if (action.left == hold && nextLeftTick <= ticks) {
         if (canGoLeft()) {
             cursorX--;
             nextLeftTick = calculateNextMoveTick(nextLeftTick);
@@ -48,7 +55,14 @@ bool Tetris::tick(Keyboard keyboard) {
         }
     }
 
-    if (keyboard.right && nextRightTick <= ticks) {
+    if (action.right == press) {
+        if (canGoRight()) {
+            cursorX++;
+            state_changed = true;
+        }
+    }
+
+    if (action.right == hold && nextRightTick <= ticks) {
         if (canGoRight()) {
             cursorX++;
             nextRightTick = calculateNextMoveTick(nextRightTick);
@@ -56,23 +70,36 @@ bool Tetris::tick(Keyboard keyboard) {
         }
     }
 
-    // Drop tetrimino on space
-    if (keyboard.space && nextSpaceTick <= ticks) {
+    // Drop tetrimino on drop
+    if (action.drop == press) {
         while (canGoDown()) {
             cursorY--;
         }
-        nextSpaceTick = calculateNextMoveTick(nextSpaceTick) + 4;
     }
 
-    // Rotate tetrimino on up
-    if (keyboard.up && nextUpTick <= ticks) {
+    // Rotate tetrimino on rotate_left
+    if (action.rotate_left == press) {
+        rotateLeft();
+        state_changed = true;
+    }
+
+    // Rotate tetrimino on rotate_left
+    if (action.rotate_left == hold && nextUpTick <= ticks) {
         rotateLeft();
         nextUpTick = calculateNextMoveTick(nextUpTick) + 4;
         state_changed = true;
     }
 
     // Move tetrimino down
-    if (keyboard.down && nextDownTick <= ticks) {
+    if (action.down == press) {
+        if (canGoDown()) {
+            cursorY--;
+            state_changed = true;
+        }
+    }
+
+    // Move tetrimino down
+    if (action.down == hold && nextDownTick <= ticks) {
         if (canGoDown()) {
             nextDownTick = calculateNextMoveTick(nextDownTick);
             cursorY--;
@@ -110,7 +137,7 @@ bool Tetris::tick(Keyboard keyboard) {
 }
 
 /**
- * Checks for button holds and speeds up movement if true
+ * Checks for button holds and speeds rotate_left movement if true
  *
  * @param ticks
  * @param oldNextMoveTick

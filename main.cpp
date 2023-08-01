@@ -18,6 +18,7 @@
 
 int main() {
     /* INIT */
+    Keyboard keyboard{};
     Window gWindow{};
     Engine tEngine{&gWindow};
     Tetris vTetris{};
@@ -28,9 +29,10 @@ int main() {
         float frameTime = 0.0f; // Time since last frame
         const float targetFrameTime = 1.0f / 60.0f; // 60 FPS
         int nDrawnFrames = 0;
+        Action action;
 
         /* MAIN LOOP */
-        while (!gWindow.shouldClose()) {
+        while (!gWindow.shouldClose(action)) {
             /* UPDATE FRAME TIME */
             auto endTime = std::chrono::high_resolution_clock::now();
             std::chrono::duration<float> frameDuration = endTime - startTime;
@@ -39,14 +41,14 @@ int main() {
 
 
             /* PROCESS INPUT */
-            gWindow.pollEvents();
+            Window::pollEvents();
 
             //<editor-fold desc="/* FORCE FRAME/TICK RATE */" defaultstate="collapsed">
             if (frameTime >= targetFrameTime) {
-                Keyboard keyboard = gWindow.getKeyboard();
+                action = Keyboard::getAction();
 
                 /* PROCESS TETRIS TICK */
-                if (vTetris.tick(keyboard)) {
+                if (vTetris.tick(action)) {
                     /* IF TETRIS STATE CHANGED */
 
                     /* UPDATE VERTEXES */
@@ -54,13 +56,13 @@ int main() {
                 }
 
                 /* RENDER FRAME */
-                tEngine.updateSettings(keyboard);
+                tEngine.updateSettings(action);
                 tEngine.drawFrame();
                 nDrawnFrames++;
                 frameTime = 0;
 
-                /* CLEAR EVENTS */
-                gWindow.clearEvents();
+                /* CLEAN INPUT */
+                Keyboard::tick();
             }
             //</editor-fold>
         }

@@ -20,7 +20,7 @@ public:
 
     ~Tetris();
 
-    bool tick(Keyboard keyboard);
+    bool tick(Action action);
 
     std::vector<Vertex> getVertices();
     //</editor-fold>
@@ -318,7 +318,7 @@ private:
 
     // Score
     int64_t score{};
-    // Add space to the top off the board to allow for tetriminos to spawn
+    // Add drop to the top off the board to allow for tetriminos to spawn
     Colour board[B_WIDTH][B_HEIGHT + 4] = {Colour::NONE};
     bool start = false;
 

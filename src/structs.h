@@ -93,26 +93,33 @@ struct UniformBufferObject {
 };
 
 /**
- * @brief A struct to hold various keyboard input
+ * @brief A struct to hold various Keyboard input
  */
-struct Keyboard {
+enum ActionType {
+    press, hold, release
+};
+
+/**
+ * @brief A struct to hold various Keyboard input
+ */
+struct Action {
     /* PIECE CONTROL */
-    bool left = false;
-    bool right = false;
-    bool up = false;
-    bool down = false;
-    bool space = false;
+    ActionType left = release;
+    ActionType right = release;
+    ActionType rotate_left = release;
+    ActionType rotate_right = release;
+    ActionType down = release;
+    ActionType drop = release;
 
     /* GAME CONTROL */
-    bool pageUp = false;
-    bool pageDown = false;
-    bool esc = false;
-    bool enter = false;
+    ActionType pageUp = release;
+    ActionType pageDown = release;
+    ActionType esc = release;
+    ActionType enter = release;
 
     /* SHADER CONTROL */
-    bool n1 = false;
-    bool n2 = false;
-
+    ActionType n1 = release;
+    ActionType n2 = release;
 };
 
 #endif //VULKAN_TETRIS_STRUCTS_H

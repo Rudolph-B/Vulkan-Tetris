@@ -67,7 +67,7 @@ Engine::Engine(Window *window) {
 
 Engine::~Engine() {
     /*
-     * Mostly clean up in reverse order of creation to ensure pointers are not lost.
+     * Mostly clean rotate_left in reverse order of creation to ensure pointers are not lost.
      */
     cleanupSwapChain();
 
@@ -107,7 +107,7 @@ Engine::~Engine() {
 }
 
 /**
- * @brief Cleans up the swap chain.
+ * @brief Cleans rotate_left the swap chain.
  */
 void Engine::cleanupSwapChain() {
     for (auto framebuffer : swapChainFramebuffers) {
@@ -215,7 +215,7 @@ void Engine::setupDebugMessenger() {
 
     // Create debug messenger
     if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-        throw std::runtime_error("failed to set up debug messenger!");
+        throw std::runtime_error("failed to set rotate_left debug messenger!");
     }
 }
 
@@ -681,7 +681,7 @@ void Engine::copyVertexBuffer() {
 }
 
 /**
- * @brief Cleans up the vertex buffers
+ * @brief Cleans rotate_left the vertex buffers
  */
 void Engine::cleanVertexBuffer() {
     vkDestroyBuffer(device, vertexBuffer, nullptr);
@@ -711,7 +711,7 @@ void Engine::copyIndexBuffer() {
 }
 
 /**
- * @brief Cleans up the index buffers
+ * @brief Cleans rotate_left the index buffers
  */
 void Engine::cleanIndexBuffer() {
     vkDestroyBuffer(device, indexBuffer, nullptr);
@@ -1494,11 +1494,11 @@ void Engine::waitDeviceIdle() {
  * @brief Adjust how the rendering is done
  * @param keyboard
  */
-void Engine::updateSettings(Keyboard keyboard) {
-    if (keyboard.n1) {
+void Engine::updateSettings(Action keyboard) {
+    if (keyboard.n1 == press) {
         uniformBufferObject.model = 0;
     }
-    else if (keyboard.n2) {
+    else if (keyboard.n2 == press) {
         // Hard mode
         uniformBufferObject.model = 1;
     }

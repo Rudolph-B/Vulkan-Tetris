@@ -68,7 +68,7 @@ public:
     void copyVertexBuffer();
     void copyIndexBuffer();
     void updateVertices(const std::vector<Vertex> &nVertices);
-    void updateSettings(Keyboard keyboard);
+    void updateSettings(Action keyboard);
     //</editor-fold>
 private:
     //<editor-fold desc="/* PRIVATE PARAMETERS */" defaultstate="collapsed">
