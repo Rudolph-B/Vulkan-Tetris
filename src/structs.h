@@ -106,7 +106,7 @@ struct Action {
     /* PIECE CONTROL */
     ActionType left = release;
     ActionType right = release;
-    ActionType rotate_left = release;
+    ActionType rotateLeft = release;
     ActionType rotate_right = release;
     ActionType down = release;
     ActionType drop = release;

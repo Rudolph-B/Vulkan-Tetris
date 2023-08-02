@@ -22,13 +22,13 @@ bool Tetris::tick(Action action) {
         start = true;
     }
 
-    // Increase speed on page rotate_left
+    // Increase speed on page rotateLeft
     if (action.pageUp == press && nextSpeedUpdateTick < ticks) {
         iDropTickDivider = std::max(0, std::min(iDropTickDivider - 1, 6));
         nextSpeedUpdateTick = ticks + moveTickOffset * 3;
     }
 
-    // Increase speed on page rotate_left
+    // Increase speed on page rotateLeft
     if (action.pageDown == press && nextSpeedUpdateTick < ticks) {
         iDropTickDivider = std::max(0, std::min(iDropTickDivider + 1, 6));
         nextSpeedUpdateTick = ticks + moveTickOffset * 3;
@@ -77,14 +77,14 @@ bool Tetris::tick(Action action) {
         }
     }
 
-    // Rotate tetrimino on rotate_left
-    if (action.rotate_left == press) {
+    // Rotate tetrimino on rotateLeft
+    if (action.rotateLeft == press) {
         rotateLeft();
         state_changed = true;
     }
 
-    // Rotate tetrimino on rotate_left
-    if (action.rotate_left == hold && nextUpTick <= ticks) {
+    // Rotate tetrimino on rotateLeft
+    if (action.rotateLeft == hold && nextUpTick <= ticks) {
         rotateLeft();
         nextUpTick = calculateNextMoveTick(nextUpTick) + 4;
         state_changed = true;
@@ -137,7 +137,7 @@ bool Tetris::tick(Action action) {
 }
 
 /**
- * Checks for button holds and speeds rotate_left movement if true
+ * Checks for button holds and speeds rotateLeft movement if true
  *
  * @param ticks
  * @param oldNextMoveTick

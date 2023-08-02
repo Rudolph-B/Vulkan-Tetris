@@ -67,7 +67,7 @@ Engine::Engine(Window *window) {
 
 Engine::~Engine() {
     /*
-     * Mostly clean rotate_left in reverse order of creation to ensure pointers are not lost.
+     * Mostly clean rotateLeft in reverse order of creation to ensure pointers are not lost.
      */
     cleanupSwapChain();
 
@@ -107,7 +107,7 @@ Engine::~Engine() {
 }
 
 /**
- * @brief Cleans rotate_left the swap chain.
+ * @brief Cleans rotateLeft the swap chain.
  */
 void Engine::cleanupSwapChain() {
     for (auto framebuffer : swapChainFramebuffers) {
@@ -215,7 +215,7 @@ void Engine::setupDebugMessenger() {
 
     // Create debug messenger
     if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-        throw std::runtime_error("failed to set rotate_left debug messenger!");
+        throw std::runtime_error("failed to set rotateLeft debug messenger!");
     }
 }
 
@@ -681,7 +681,7 @@ void Engine::copyVertexBuffer() {
 }
 
 /**
- * @brief Cleans rotate_left the vertex buffers
+ * @brief Cleans rotateLeft the vertex buffers
  */
 void Engine::cleanVertexBuffer() {
     vkDestroyBuffer(device, vertexBuffer, nullptr);
@@ -711,7 +711,7 @@ void Engine::copyIndexBuffer() {
 }
 
 /**
- * @brief Cleans rotate_left the index buffers
+ * @brief Cleans rotateLeft the index buffers
  */
 void Engine::cleanIndexBuffer() {
     vkDestroyBuffer(device, indexBuffer, nullptr);
