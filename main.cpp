@@ -45,7 +45,9 @@ int main() {
 
             //<editor-fold desc="/* FORCE FRAME/TICK RATE */" defaultstate="collapsed">
             if (frameTime >= targetFrameTime) {
-                action = Keyboard::getAction();
+                action = {release};
+                Keyboard::updateAction(action);
+                Gamepad::updateAction(action);
 
                 /* PROCESS TETRIS TICK */
                 if (vTetris.tick(action)) {
@@ -63,6 +65,7 @@ int main() {
 
                 /* CLEAN INPUT */
                 Keyboard::tick();
+                Gamepad::tick();
             }
             //</editor-fold>
         }

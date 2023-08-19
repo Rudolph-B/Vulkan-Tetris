@@ -14,6 +14,7 @@ Window::Window() {
     glfwSetWindowUserPointer(glfwWindow, this);
     glfwSetFramebufferSizeCallback(glfwWindow, framebufferResizeCallback);
     glfwSetKeyCallback(glfwWindow, Keyboard::keyCallback);
+    glfwSetJoystickCallback(Gamepad::gamepadCallback);
 }
 
 void Window::framebufferResizeCallback(GLFWwindow *window, int width, int height) {

@@ -9,7 +9,8 @@
 #include "GLFW/glfw3.h"
 #include "constants.h"
 #include "structs.h"
-#include "inp/Keyboard.h"
+#include "inp/keyboard.h"
+#include "inp/gamepad.h"
 
 class Window {
 public:
