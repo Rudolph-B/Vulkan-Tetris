@@ -146,7 +146,7 @@ private:
 
 public:
     static void keyCallback(GLFWwindow *window, int rawKey, int scancode, int action, int mods);
-    static Action getAction();
+    static void updateAction(Action &oldAction);
     static void tick();
 
 };

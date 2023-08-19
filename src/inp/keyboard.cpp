@@ -1,7 +1,7 @@
 //
 // Created by Rudolph on 2023/08/01.
 //
-#include "Keyboard.h"
+#include "keyboard.h"
 
 int Keyboard::keys[KEYBOARD_N_KEYS] = {0};
 int Keyboard::eventKeys[KEYBOARD_N_KEYS] = {0};
@@ -12,7 +12,7 @@ void Keyboard::keyCallback(GLFWwindow *window, int rawKey, int scancode, int act
     Keys key = getKeyFromRawKey(rawKey);
 
     if (action == GLFW_PRESS) {
-        Keyboard::keys[key] += KEYBOARD_PRESS;
+        Keyboard::keys[key] = KEYBOARD_PRESS;
         Keyboard::eventKeys[key] = KEYBOARD_PRESS;
     }
     else if (action == GLFW_RELEASE) {
@@ -277,31 +277,32 @@ void Keyboard::tick() {
     }
 }
 
-Action Keyboard::getAction() {
-    Action action = {release};
-    action.left = (Keyboard::keys[left] == KEYBOARD_PRESS) ? press : release;
-    action.right = (Keyboard::keys[right] == KEYBOARD_PRESS) ? press : release;
-    action.down = (Keyboard::keys[down] == KEYBOARD_PRESS) ? press : release;
-    action.rotateLeft = (Keyboard::keys[up] == KEYBOARD_PRESS) ? press : release;
-    action.drop = (Keyboard::keys[space] == KEYBOARD_PRESS) ? press : release;
-    action.pageUp = (Keyboard::keys[pageUp] == KEYBOARD_PRESS) ? press : release;
-    action.pageDown = (Keyboard::keys[pageDown] == KEYBOARD_PRESS) ? press : release;
-    action.enter = (Keyboard::keys[enter] == KEYBOARD_PRESS) ? press : release;
-    action.esc = (Keyboard::keys[escape] == KEYBOARD_PRESS) ? press : release;
-    action.n1 = (Keyboard::keys[n1] == KEYBOARD_PRESS) ? press : release;
-    action.n2 = (Keyboard::keys[n2] == KEYBOARD_PRESS) ? press : release;
+void Keyboard::updateAction(Action &oldAction) {
+    oldAction.left = (Keyboard::keys[left] == KEYBOARD_PRESS) ? press : oldAction.left;
+    oldAction.right = (Keyboard::keys[right] == KEYBOARD_PRESS) ? press : oldAction.right;
+    oldAction.down = (Keyboard::keys[down] == KEYBOARD_PRESS) ? press : oldAction.down;
+    oldAction.rotateLeft = (Keyboard::keys[up] == KEYBOARD_PRESS) ? press : oldAction.rotateLeft;
+    oldAction.drop = (Keyboard::keys[space] == KEYBOARD_PRESS) ? press : oldAction.drop;
+    oldAction.pageUp = (Keyboard::keys[pageUp] == KEYBOARD_PRESS) ? press : oldAction.pageUp;
+    oldAction.pageDown = (Keyboard::keys[pageDown] == KEYBOARD_PRESS) ? press : oldAction.pageDown;
+    oldAction.enter = (Keyboard::keys[enter] == KEYBOARD_PRESS) ? press : oldAction.enter;
+    oldAction.esc = (Keyboard::keys[escape] == KEYBOARD_PRESS) ? press : oldAction.esc;
+    oldAction.n1 = (Keyboard::keys[n1] == KEYBOARD_PRESS) ? press : oldAction.n1;
+    oldAction.n2 = (Keyboard::keys[n2] == KEYBOARD_PRESS) ? press : oldAction.n2;
 
-    action.left = (Keyboard::eventKeys[left] == KEYBOARD_HOLD) ? hold : action.left;
-    action.right = (Keyboard::eventKeys[right] == KEYBOARD_HOLD) ? hold : action.right;
-    action.down = (Keyboard::eventKeys[down] == KEYBOARD_HOLD) ? hold : action.down;
-    action.rotateLeft = (Keyboard::eventKeys[up] == KEYBOARD_HOLD) ? hold : action.rotateLeft;
-    action.drop = (Keyboard::eventKeys[space] == KEYBOARD_HOLD) ? hold : action.drop;
-    action.pageUp = (Keyboard::eventKeys[pageUp] == KEYBOARD_HOLD) ? hold : action.pageUp;
-    action.pageDown = (Keyboard::eventKeys[pageDown] == KEYBOARD_HOLD) ? hold : action.pageDown;
-    action.enter = (Keyboard::eventKeys[enter] == KEYBOARD_HOLD) ? hold : action.enter;
-    action.esc = (Keyboard::eventKeys[escape] == KEYBOARD_HOLD) ? hold : action.esc;
-    action.n1 = (Keyboard::eventKeys[n1] == KEYBOARD_HOLD) ? hold : action.n1;
-    action.n2 = (Keyboard::eventKeys[n2] == KEYBOARD_HOLD) ? hold : action.n2;
+    oldAction.left = (Keyboard::eventKeys[left] == KEYBOARD_HOLD) ? hold : oldAction.left;
+    oldAction.right = (Keyboard::eventKeys[right] == KEYBOARD_HOLD) ? hold : oldAction.right;
+    oldAction.down = (Keyboard::eventKeys[down] == KEYBOARD_HOLD) ? hold : oldAction.down;
+    oldAction.rotateLeft = (Keyboard::eventKeys[up] == KEYBOARD_HOLD) ? hold : oldAction.rotateLeft;
+    oldAction.drop = (Keyboard::eventKeys[space] == KEYBOARD_HOLD) ? hold : oldAction.drop;
+    oldAction.pageUp = (Keyboard::eventKeys[pageUp] == KEYBOARD_HOLD) ? hold : oldAction.pageUp;
+    oldAction.pageDown = (Keyboard::eventKeys[pageDown] == KEYBOARD_HOLD) ? hold : oldAction.pageDown;
+    oldAction.enter = (Keyboard::eventKeys[enter] == KEYBOARD_HOLD) ? hold : oldAction.enter;
+    oldAction.esc = (Keyboard::eventKeys[escape] == KEYBOARD_HOLD) ? hold : oldAction.esc;
+    oldAction.n1 = (Keyboard::eventKeys[n1] == KEYBOARD_HOLD) ? hold : oldAction.n1;
+    oldAction.n2 = (Keyboard::eventKeys[n2] == KEYBOARD_HOLD) ? hold : oldAction.n2;
 
-    return action;
+    for (int & key : Keyboard::keys) {
+        key = KEYBOARD_RELEASE;
+    }
 }
