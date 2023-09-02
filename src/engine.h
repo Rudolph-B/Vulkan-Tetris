@@ -106,13 +106,13 @@ private:
     VkDeviceMemory vertexBufferMemory;
     VkBuffer vertexStagingBuffer;
     VkDeviceMemory vertexStagingBufferMemory;
-    VkDeviceSize vertexBufferSize = sizeof(Vertex) * 450;
+    VkDeviceSize vertexBufferSize = 800 * sizeof(uint32_t); // Actual max is 231
 
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
     VkBuffer indexStagingBuffer;
     VkDeviceMemory indexStagingBufferMemory;
-    VkDeviceSize indexBufferSize = sizeof(uint32_t) * 450;
+    VkDeviceSize indexBufferSize = 1200 * sizeof(uint32_t); // Actual max is 1200
 
     UniformBufferObject uniformBufferObject = {0};
     std::vector<VkBuffer> uniformBuffers;

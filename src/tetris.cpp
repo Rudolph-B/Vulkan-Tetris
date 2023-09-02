@@ -212,14 +212,14 @@ Tetris::~Tetris() = default;
  * @param c
  * @return
  */
-std::vector<Vertex> Tetris::buildVertices(int i, int j, Colour c, int age) {
+std::vector<Vertex> Tetris::buildVertices(int i, int j, Colour c, int8_t age) {
     return {
-            {{(float) i / (float) B_WIDTH,       (float) j / (float) B_HEIGHT},       c, age},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       c, age},
-            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, c, age},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) (j + 1) / (float) B_HEIGHT}, c, age},
-            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, c, age},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       c, age}
+            {{(float) i / (float) B_WIDTH,       (float) j / (float) B_HEIGHT},       (int8_t) c, age},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       (int8_t) c, age},
+            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, (int8_t) c, age},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) (j + 1) / (float) B_HEIGHT}, (int8_t) c, age},
+            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, (int8_t) c, age},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       (int8_t) c, age}
     };
 }
 

@@ -674,7 +674,7 @@ void Engine::createVertexBuffer() {
 void Engine::copyVertexBuffer() {
     void* data;
     vkMapMemory(device, vertexStagingBufferMemory, 0, vertexBufferSize, 0, &data);
-    memcpy(data, objVertices.data(), objVertices.size() * sizeof (objVertices[0]));
+    memcpy(data, objVertices.data(), (size_t) vertexBufferSize);
     vkUnmapMemory(device, vertexStagingBufferMemory);
 
     copyBuffer(vertexStagingBuffer, vertexBuffer, vertexBufferSize);
@@ -703,11 +703,11 @@ void Engine::createIndexBuffer() {
  */
 void Engine::copyIndexBuffer() {
     void* data;
-    vkMapMemory(device, vertexStagingBufferMemory, 0, indexBufferSize, 0, &data);
-    memcpy(data, objIndices.data(), objIndices.size() * sizeof (objIndices[0]));
-    vkUnmapMemory(device, vertexStagingBufferMemory);
+    vkMapMemory(device, indexStagingBufferMemory, 0, indexBufferSize, 0, &data);
+    memcpy(data, objIndices.data(), (size_t) indexBufferSize);
+    vkUnmapMemory(device, indexStagingBufferMemory);
 
-    copyBuffer(vertexStagingBuffer, indexBuffer, indexBufferSize);
+    copyBuffer(indexStagingBuffer, indexBuffer, indexBufferSize);
 }
 
 /**
@@ -765,21 +765,6 @@ void Engine::updateVertices(const std::vector<Vertex> &nVertices) {
 
         // Add the index of the vertex to the list of indices
         objIndices.push_back(uniqueVertices[vertex]);
-    }
-
-    /* UPDATE INDEX&VERTEX BUFFER SIZE */
-    if (indexBufferSize <= objIndices.size() * sizeof(uint32_t) || vertexBufferSize <= objVertices.size() * sizeof(Vertex)) {
-        // Clean old buffers
-        cleanIndexBuffer();
-        cleanVertexBuffer();
-
-        // Update the buffer sizes to be larger
-        indexBufferSize = 2 * objIndices.size() * sizeof(uint32_t);
-        vertexBufferSize = 2 * objVertices.size() * sizeof(Vertex);
-
-        // Create new buffers
-        createVertexBuffer();
-        createIndexBuffer();
     }
 
     // Copy the vertices and indices to the buffers
