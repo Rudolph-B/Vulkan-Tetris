@@ -75,6 +75,7 @@ bool Tetris::tick(Action action) {
         while (canGoDown()) {
             cursorY--;
         }
+        state_changed = true;
     }
 
     // Rotate tetrimino on rotateLeft

@@ -673,11 +673,12 @@ void Engine::createVertexBuffer() {
  */
 void Engine::copyVertexBuffer() {
     void* data;
-    vkMapMemory(device, vertexStagingBufferMemory, 0, vertexBufferSize, 0, &data);
-    memcpy(data, objVertices.data(), (size_t) vertexBufferSize);
+    VkDeviceSize bufferSize = sizeof(objVertices[0]) * objVertices.size();
+    vkMapMemory(device, vertexStagingBufferMemory, 0, bufferSize, 0, &data);
+    memcpy(data, objVertices.data(), (size_t) bufferSize);
     vkUnmapMemory(device, vertexStagingBufferMemory);
 
-    copyBuffer(vertexStagingBuffer, vertexBuffer, vertexBufferSize);
+    copyBuffer(vertexStagingBuffer, vertexBuffer, bufferSize);
 }
 
 /**
@@ -703,11 +704,13 @@ void Engine::createIndexBuffer() {
  */
 void Engine::copyIndexBuffer() {
     void* data;
-    vkMapMemory(device, indexStagingBufferMemory, 0, indexBufferSize, 0, &data);
-    memcpy(data, objIndices.data(), (size_t) indexBufferSize);
+    VkDeviceSize bufferSize = sizeof(objIndices[0]) * objIndices.size();
+
+    vkMapMemory(device, indexStagingBufferMemory, 0, bufferSize, 0, &data);
+    memcpy(data, objIndices.data(), (size_t) bufferSize);
     vkUnmapMemory(device, indexStagingBufferMemory);
 
-    copyBuffer(indexStagingBuffer, indexBuffer, indexBufferSize);
+    copyBuffer(indexStagingBuffer, indexBuffer, bufferSize);
 }
 
 /**
