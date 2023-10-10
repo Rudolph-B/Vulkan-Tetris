@@ -122,4 +122,7 @@ struct Action {
     ActionType n2 = release;
 };
 
+
+
+
 #endif //VULKAN_TETRIS_STRUCTS_H

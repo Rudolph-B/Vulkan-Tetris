@@ -16,7 +16,7 @@ class Window {
 public:
     Window();
     ~Window();
-    [[nodiscard]] bool shouldClose(Action action) const;
+    [[nodiscard]] bool shouldClose() const;
     static void pollEvents();
 
     GLFWwindow* glfwWindow;

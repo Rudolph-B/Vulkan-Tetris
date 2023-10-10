@@ -5,9 +5,10 @@
 #ifndef VULKAN_TETRIS_TETRIS_H
 #define VULKAN_TETRIS_TETRIS_H
 
-#include "structs.h"
+#include "../structs.h"
+#include "../scene.h"
 
-class Tetris {
+class Tetris: public Scene {
 public:
     //<editor-fold desc="/* PUBLIC CONSTANTS */" defaultstate="collapsed">
     // Board dimensions
@@ -20,9 +21,9 @@ public:
 
     ~Tetris();
 
-    bool tick(Action action);
+    Result tick(Action action) override;
 
-    std::vector<Vertex> getVertices();
+    std::vector<Vertex> getVertices() override;
     //</editor-fold>
 
     //<editor-fold desc="/* PUBLIC VARIABLES */" defaultstate="collapsed">
@@ -301,8 +302,6 @@ private:
     //</editor-fold>
 
     //<editor-fold desc="/* PRIVATE VARIABLES */" defaultstate="collapsed">
-    // Keeps track of the number of ticks since the game started
-    int ticks{};
     // Default piece moves down every 0.5s (60 ticks per second / 30 ticks per drop)
     const int dropTickDivider[7] = {8, 12, 20, 30, 45, 80, 120};
     int iDropTickDivider = 3;
@@ -313,14 +312,13 @@ private:
     int nextRightTick = 0;
     int nextDownTick = 0;
     int nextUpTick = 0;
-    int nextSpaceTick = 0;
     int nextSpeedUpdateTick = 0;
 
     // Score
     int64_t score{};
     // Add drop to the top off the board to allow for tetriminos to spawn
     Colour board[B_WIDTH][B_HEIGHT + 4] = {Colour::NONE};
-    bool start = false;
+    bool started = false;
 
     // Current tetrimino
     int8_t cursorX{};

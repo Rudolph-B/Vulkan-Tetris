@@ -11,15 +11,25 @@
  * @param action
  * @return
  */
-bool Tetris::tick(Action action) {
-    ticks++;
+Scene::Result Tetris::tick(Action action) {
+    Scene::tick(action);
     bool state_changed = false;
+
+    // Check for exit
+    if (action.esc == press) {
+        return Result::close;
+    }
 
     // Reset game on enter
     if (action.enter == press) {
         newTetrimino();
         clearBoard();
-        start = true;
+        started = true;
+    }
+
+    // Wait for enter to started
+    if (!started) {
+        return ticks % 5 == 0 ? Result::update : Result::noop;
     }
 
     // Increase speed on page rotateLeft
@@ -32,11 +42,6 @@ bool Tetris::tick(Action action) {
     if (action.pageDown == press && nextSpeedUpdateTick < ticks) {
         iDropTickDivider = std::max(0, std::min(iDropTickDivider + 1, 6));
         nextSpeedUpdateTick = ticks + moveTickOffset * 3;
-    }
-
-    // Wait for enter to start
-    if (!start) {
-        return false;
     }
 
     //<editor-fold desc="/* USER MOVE TETRIMINO */" defaultstate="collapsed">
@@ -111,7 +116,7 @@ bool Tetris::tick(Action action) {
 
     // Check if the game should move the tetrimino down
     if (((ticks % dropTickDivider[iDropTickDivider]) != 1)) {
-        return state_changed;
+        return state_changed ? Result::update : Result::noop;
     }
 
     // Check if the tetrimino can move down
@@ -127,14 +132,14 @@ bool Tetris::tick(Action action) {
         // Check for game over
         if (!canGoDown()) {
             // Pause game
-            start = false;
-            return true;
+            started = false;
+            return Result::update;
         }
     }
 
     // Move tetrimino down
     cursorY--;
-    return true;
+    return Result::update;
 }
 
 /**
@@ -160,6 +165,13 @@ int Tetris::calculateNextMoveTick(int oldNextMoveTick) const {// Check for butto
  */
 std::vector<Vertex> Tetris::getVertices() {
     std::vector<Vertex> vertices;
+
+    /* ONLY RENDER IF GAME STARTED */
+    if (!started) {
+        return {
+            {{0, 0},  0, 0}
+        };
+    }
 
     /* ITERATE OVER BOARD */
     for (int i = 0; i < B_WIDTH; i++) {
@@ -416,7 +428,6 @@ void Tetris::clearBoard() {
     nextRightTick = 0;
     nextDownTick = 0;
     nextUpTick = 0;
-    nextSpaceTick = 0;
     nextSpeedUpdateTick = 0;
 
     // Reset Speed

@@ -4,24 +4,24 @@
 
 //<editor-fold desc="/* STANDARD INCLUDES */" defaultstate="collapsed">
 #include <iostream>
-#include <stdexcept>
 #include <cstdlib>
 #include <optional>
 //</editor-fold>
 
 //<editor-fold desc="/* SOURCE INCLUDES */" defaultstate="collapsed">
 #include "src/engine.h"
-#include "src/constants.h"
 #include "src/window.h"
-#include "src/tetris.h"
+#include "src/sce/tetris.h"
+#include "src/sce/intro.h"
 //</editor-fold>
 
 int main() {
     /* INIT */
-    Keyboard keyboard{};
     Window gWindow{};
     Engine tEngine{&gWindow};
-    Tetris vTetris{};
+    Scene* cScene = new Intro{};
+    Scene* nScene;
+    bool shouldClose = false;
 
     try {
         /* INIT STATS */
@@ -32,7 +32,7 @@ int main() {
         Action action;
 
         /* MAIN LOOP */
-        while (!gWindow.shouldClose(action)) {
+        while (!gWindow.shouldClose() && !shouldClose) {
             /* UPDATE FRAME TIME */
             auto endTime = std::chrono::high_resolution_clock::now();
             std::chrono::duration<float> frameDuration = endTime - startTime;
@@ -50,11 +50,26 @@ int main() {
                 Gamepad::updateAction(action);
 
                 /* PROCESS TETRIS TICK */
-                if (vTetris.tick(action)) {
-                    /* IF TETRIS STATE CHANGED */
+                switch (cScene->tick(action)) {
+                    case Scene::Result::update:
+                        /* UPDATE VERTEXES */
+                        tEngine.updateVertices(cScene->getVertices());
+                        break;
+                    case Scene::Result::next:
+                        /* CHANGE SCENE */
+                        nScene = cScene->nextScene();
+                        delete cScene;
+                        cScene = nScene;
+                        break;
+                    case Scene::Result::close:
+                        /* CLOSE GAME */
+                        shouldClose = true;
+                        break;
 
-                    /* UPDATE VERTEXES */
-                    tEngine.updateVertices(vTetris.getVertices());
+                    case Scene::Result::noop:
+                    default:
+                        /* NOOP */
+                        break;
                 }
 
                 /* RENDER FRAME */
@@ -71,10 +86,13 @@ int main() {
         }
 
         tEngine.waitDeviceIdle();
+
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
+        delete cScene;
         return EXIT_FAILURE;
     }
 
+    delete cScene;
     return EXIT_SUCCESS;
 }

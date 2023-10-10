@@ -682,7 +682,7 @@ void Engine::copyVertexBuffer() {
 }
 
 /**
- * @brief Cleans rotateLeft the vertex buffers
+ * @brief Cleans the vertex buffers
  */
 void Engine::cleanVertexBuffer() {
     vkDestroyBuffer(device, vertexBuffer, nullptr);

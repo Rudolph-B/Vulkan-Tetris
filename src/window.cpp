@@ -27,12 +27,7 @@ Window::~Window() {
     glfwTerminate();
 }
 
-bool Window::shouldClose(Action action) const {
-    /* CHECK FOR WINDOW CLOSE */
-    if (action.esc == press) {
-        return true;
-    }
-
+bool Window::shouldClose() const {
     return glfwWindowShouldClose(glfwWindow);
 }
 
