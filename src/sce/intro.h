@@ -9,6 +9,10 @@
 #include "../scene.h"
 
 class Intro: public Scene {
+public:
+    Intro();
+
+private:
     Result tick(Action action) override;
 
     std::vector<Vertex> getVertices() override;

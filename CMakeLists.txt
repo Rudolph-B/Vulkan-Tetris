@@ -18,8 +18,17 @@ target_link_libraries(${PROJECT_NAME} glm)
 add_subdirectory(lib/glfw)
 target_link_libraries(${PROJECT_NAME} glfw)
 
+# TINY-XML-2
+add_subdirectory(lib/tinyxml2)
+target_link_libraries(${PROJECT_NAME} tinyxml2)
+
 # ---------------------- SHADERS ----------------------
 set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
+
+# Copies the assets to the build directory
+add_custom_target(Assets ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/ass ${PROJECT_BINARY_DIR}/ass
+)
 
 file(GLOB_RECURSE GLSL_SOURCE_FILES
     "shd/*.frag"
@@ -48,9 +57,12 @@ add_custom_target(
 
 # Adds the shaders as a dependency of the main project
 add_dependencies(Vulkan-Tetris Shaders)
+add_dependencies(Vulkan-Tetris Assets)
 
 # Copies the shaders to the build directory
 add_custom_command(TARGET Vulkan-Tetris POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Vulkan-Tetris>/shd/"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/shd" "$<TARGET_FILE_DIR:Vulkan-Tetris>/shd"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Vulkan-Tetris>/ass/"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/ass" "$<TARGET_FILE_DIR:Vulkan-Tetris>/ass"
 )

@@ -19,11 +19,13 @@ int main() {
     /* INIT */
     Window gWindow{};
     Engine tEngine{&gWindow};
-    Scene* cScene = new Intro{};
+    Scene* cScene;
     Scene* nScene;
     bool shouldClose = false;
 
     try {
+        cScene = new Intro{};
+
         /* INIT STATS */
         auto startTime = std::chrono::high_resolution_clock::now();
         float frameTime = 0.0f; // Time since last frame
@@ -60,6 +62,7 @@ int main() {
                         nScene = cScene->nextScene();
                         delete cScene;
                         cScene = nScene;
+                        nScene = nullptr;
                         break;
                     case Scene::Result::close:
                         /* CLOSE GAME */
@@ -89,10 +92,7 @@ int main() {
 
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
-        delete cScene;
-        return EXIT_FAILURE;
     }
 
-    delete cScene;
     return EXIT_SUCCESS;
 }
