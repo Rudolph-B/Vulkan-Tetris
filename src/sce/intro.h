@@ -13,11 +13,16 @@ public:
     Intro();
 
 private:
+    std::vector<Vertex> vertices;
+    const char * INVALID_FILE = "ass/intro.o.svg is not valid asset file";
+
     Result tick(Action action) override;
 
     std::vector<Vertex> getVertices() override;
 
     Scene* nextScene() override;
+
+    std::vector<Vertex> parseSvg(std::string path);
 };
 
 
