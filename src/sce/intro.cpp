@@ -32,15 +32,15 @@ Scene *Intro::nextScene() {
 
 Intro::Intro() {
     tinyxml2::XMLDocument doc;
-    tinyxml2::XMLElement* svg;
-    tinyxml2::XMLElement* group;
-    tinyxml2::XMLElement* ref;
-    tinyxml2::XMLElement* ass;
-    tinyxml2::XMLElement* path;
+    tinyxml2::XMLElement *svg;
+    tinyxml2::XMLElement *group;
+    tinyxml2::XMLElement *ref;
+    tinyxml2::XMLElement *ass;
+    tinyxml2::XMLElement *path;
     tinyxml2::XMLError result;
 
-    const char * id;
-    const char * d;
+    const char *id;
+    const char *d;
 
     std::cout << "LOADING SVG DOC " << std::endl;
     result = doc.LoadFile("ass/intro.o.svg");
@@ -66,8 +66,7 @@ Intro::Intro() {
             ass = group;
         }
         group = group->NextSiblingElement();
-    }
-    while (group != nullptr);
+    } while (group != nullptr);
 
     if (ref == nullptr || ass == nullptr) {
         throw std::exception(INVALID_FILE);
@@ -79,12 +78,10 @@ Intro::Intro() {
         path->QueryStringAttribute("id", &id);
         path->QueryStringAttribute("d", &d);
 
-        vertices = parseSvg(d);
-        break;
-//        vertices.insert(vertices.end(), temp.begin(), temp.end());
+        temp = parseSvg(d);
+        vertices.insert(vertices.end(), temp.begin(), temp.end());
         path = path->NextSiblingElement();
-    }
-    while (path != nullptr);
+    } while (path != nullptr);
 
 
 //    path3052    d: "m0 8 14 8v-16z"
@@ -110,37 +107,49 @@ Intro::Intro() {
 }
 
 std::vector<Vertex> Intro::parseSvg(std::string path) {
-    size_t iNonNumeric[6] = {0}, cNonNumeric = 0;
-    for (size_t i = 0; i < path.length(); i++) {
-        if (!isdigit(path[i]) && path[i] != '-') {
-            iNonNumeric[cNonNumeric] = i;
-            cNonNumeric++;
-        }
-
-        if ((cNonNumeric >= 6) || path[i] == 'z') {
-            break;
-        }
-    }
-
-    if (cNonNumeric != 6 && path[0] != 'm' && path[path.length()] != 'z') {
+    if (path[0] != 'm' && path[path.length()] != 'z') {
         throw std::exception(INVALID_FILE);
     }
 
-    int x1 = 0, x2 = 0, x3= 0, y1= 0, y2= 0, y3 = 0;
+    int p[5] = {0, 0, 0, 0, 0};
+    size_t in = 0, li = 0;
+    std::string path_methods;
+    // m0 0v16l14-8z
+    // m0 8 14 8v-16z
+    for (size_t i = 0; i < path.length(); i++) {
+        if (isdigit(path[i])) {
 
-    x1 = std::atoi(path.substr(iNonNumeric[0] + 1, iNonNumeric[1] - iNonNumeric[0] - 1).c_str());
-    y1 = std::atoi(path.substr(iNonNumeric[1] + 1, iNonNumeric[2] - iNonNumeric[1] - 1).c_str());
-    x2 = std::atoi(path.substr(iNonNumeric[2] + 1, iNonNumeric[3] - iNonNumeric[2] - 1).c_str());
-    y2 = std::atoi(path.substr(iNonNumeric[3] + 1, iNonNumeric[4] - iNonNumeric[3] - 1).c_str());
-    x3 = std::atoi(path.substr(iNonNumeric[4] + 1, iNonNumeric[5] - iNonNumeric[4] - 1).c_str());
+        } else {
+            if (li != i && i > li + 1) {
+                if (path[li] == '-') {
+                    p[in] = std::atoi(path.substr(li, i - li).c_str());
+                } else {
+                    p[in] = std::atoi(path.substr(li + 1, i - li - 1).c_str());
+                }
+                in++;
+            }
 
-    std::cout << "x1 " << x1 << " y1 " << y1 << " x2 " << x2 << " y2 " << y2 << " x3 " << x3 << " y3 " << y3 << std::endl;
-    // x1 0 y1 8 x2 14 y2 8 x3 -16 y3 0
+            if (path[i] != '-' && path[i] != ' ') {
+                path_methods += path[i];
+            }
+            li = i;
+        }
+    }
 
+    ;
 
-    return {
-            {{(x1+x2)/400.0,(y2+y1)/400.0}, 5, 32},
-            {{x1/400.0,y1/400.0}, 5, 32},
-            {{(x1+x2)/400.0,(y2+y1+x3)/400.0}, 5, 32}
+    if (std::strcmp(path_methods.c_str(), "mvz") == 0) {
+        return {
+                {{p[0] / 400.0,          1 - p[1] / 800.0},                 5, 32},
+                {{(p[0] + p[2]) / 400.0, 1 - (p[3] + p[1]) / 800.0},        5, 32},
+                {{(p[0] + p[2]) / 400.0, 1 - (p[3] + p[1] + p[4]) / 800.0}, 5, 32}
+        };
+    } else {
+        return {
+                {{p[0] / 400.0,          1 - p[1] / 800.0},                 5, 32},
+                {{p[0] / 400.0,          1 - (p[1] + p[2]) / 800.0},        5, 32},
+                {{(p[0] + p[3]) / 400.0, 1 - (p[1] + p[2] + p[4]) / 800.0}, 5, 32}
+        };
     };
+
 }
