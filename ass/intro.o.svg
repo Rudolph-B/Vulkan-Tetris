@@ -1,0 +1,89 @@
+<svg width="400" height="800" version="1.1" viewBox="0 0 400 800" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<g id="REF">
+		<path id="path3052" d="m0 8 14 8v-16z" style="fill:#9b69ff;paint-order:markers stroke fill"/>
+		<path id="path3058" d="m0 0v16l14-8z" style="fill:#3c67f6;paint-order:markers stroke fill"/>
+		<path id="path3084" d="m0 0v16l14-8z" style="fill:#9b69ff;paint-order:markers stroke fill"/>
+		<path id="path3092" d="m0 8 14 8v-16z" style="fill:#3c67f6;paint-order:markers stroke fill"/>
+		<path id="path3106" d="m0 0v16l14-8z" style="fill:#ff72e1;paint-order:markers stroke fill"/>
+		<path id="path3108" d="m0 8 14 8v-16z" style="fill:#ff72e1;paint-order:markers stroke fill"/>
+		<path id="path4966" d="m0 8 14 8v-16z" style="fill:#0663ac;paint-order:markers stroke fill"/>
+		<path id="path17427" d="m0 0v16l14-8z" style="fill:#0663ac;paint-order:markers stroke fill"/>
+	</g>
+	<g id="ASS">
+		<g id="INTRO">
+			<use transform="translate(144,396)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(144,388)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(144,404)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(144,380)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(144,420)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(144,412)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(158,388)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(158,396)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(158,412)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(158,404)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(158,356)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(158,364)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(172,372)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(172,364)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(172,404)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(172,396)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(172,348)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(172,356)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(186,372)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(186,364)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(186,380)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(186,356)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(186,340)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(186,348)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(186,380)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(200,348)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(200,340)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(214,348)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(214,356)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(228,356)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(228,364)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(200,364)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(200,356)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(214,364)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(214,372)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(242,388)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(242,380)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(200,380)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(200,372)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(228,388)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(228,396)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(242,404)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(242,396)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(214,396)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(214,436)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(228,404)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(228,412)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(242,420)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(242,412)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(228,428)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(242,428)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(228,436)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(214,404)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(214,444)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(200,444)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(200,428)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(214,420)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(228,420)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(214,428)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(172,444)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(186,444)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(200,412)" style="fill:none" xlink:href="#path3108"/>
+			<use transform="translate(214,412)" style="fill:none" xlink:href="#path3106"/>
+			<use transform="translate(186,428)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(172,428)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(158,436)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(172,436)" style="fill:none" xlink:href="#path17427"/>
+			<use transform="translate(172,412)" style="fill:none" xlink:href="#path3052"/>
+			<use transform="translate(186,412)" style="fill:none" xlink:href="#path3084"/>
+			<use transform="translate(172,420)" style="fill:none" xlink:href="#path3058"/>
+			<use transform="translate(158,420)" style="fill:none" xlink:href="#path3092"/>
+			<use transform="translate(144,428)" style="fill:none" xlink:href="#path4966"/>
+			<use transform="translate(158,428)" style="fill:none" xlink:href="#path17427"/>
+		</g>
+	</g>
+</svg>

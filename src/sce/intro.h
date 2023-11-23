@@ -21,8 +21,6 @@ private:
     std::vector<Vertex> getVertices() override;
 
     Scene* nextScene() override;
-
-    std::vector<Vertex> parseSvg(std::string path);
 };
 
 
