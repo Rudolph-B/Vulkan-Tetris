@@ -40,6 +40,16 @@ public:
         ORANGE = 5,
         PURPLE = 6
     };
+    constexpr static const glm::vec3 Colours[8] = {
+        {1.0, 1.0, 1.0},
+        {1.0, 0.0, 0.0},
+        {0.0, 1.0, 0.0},
+        {0.0, 0.0, 1.0},
+        {0.0, 1.0, 1.0},
+        {1.0, 0.0, 1.0},
+        {1.0, 1.0, 0.0},
+        {1.0, 1.0, 1.0}
+    };
 
     // Used to represent the type of tetrimino
     enum Tetriminos {

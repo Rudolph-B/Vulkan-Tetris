@@ -169,7 +169,7 @@ std::vector<Vertex> Tetris::getVertices() {
     /* ONLY RENDER IF GAME STARTED */
     if (!started) {
         return {
-            {{0, 0},  0, 0}
+            {{0, 0}, {0,0,0}}
         };
     }
 
@@ -227,12 +227,12 @@ Tetris::~Tetris() = default;
  */
 std::vector<Vertex> Tetris::buildVertices(int i, int j, Colour c, int8_t age) {
     return {
-            {{(float) i / (float) B_WIDTH,       (float) j / (float) B_HEIGHT},       (int8_t) c, age},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       (int8_t) c, age},
-            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, (int8_t) c, age},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) (j + 1) / (float) B_HEIGHT}, (int8_t) c, age},
-            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, (int8_t) c, age},
-            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       (int8_t) c, age}
+            {{(float) i / (float) B_WIDTH,       (float) j / (float) B_HEIGHT},       Colours[c]},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       Colours[c]},
+            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, Colours[c]},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) (j + 1) / (float) B_HEIGHT}, Colours[c]},
+            {{(float) i / (float) B_WIDTH,       (float) (j + 1) / (float) B_HEIGHT}, Colours[c]},
+            {{(float) (i + 1) / (float) B_WIDTH, (float) j / (float) B_HEIGHT},       Colours[c]}
     };
 }
 

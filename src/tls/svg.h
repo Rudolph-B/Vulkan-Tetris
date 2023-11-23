@@ -23,11 +23,13 @@ private:
     const std::string e_file_load = "Failed to load file: ";
     const std::string e_file_invalid = "Invalid file: ";
 
-    std::vector<Vertex> parsePath(std::string path);
+    std::vector<Vertex> parsePath(std::string path, glm::vec3 colour);
 
     tinyxml2::XMLElement* getNodeWithId(const char *needle, tinyxml2::XMLElement *source) const;
 
     static std::vector<Vertex> calcTransformedVertex(std::vector<Vertex> &vector, const std::string& transform);
+
+    static glm::vec3 parseStyle(const std::string& style);
 };
 
 

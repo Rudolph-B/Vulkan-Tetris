@@ -80,6 +80,7 @@ private:
     VkSurfaceKHR surface;
 
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+    VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
     VkDevice device;
 
     VkQueue graphicsQueue;
@@ -98,6 +99,10 @@ private:
     VkPipeline graphicsPipeline;
 
     VkCommandPool commandPool;
+
+    VkImage colorImage;
+    VkDeviceMemory colorImageMemory;
+    VkImageView colorImageView;
 
     std::vector<Vertex> objVertices;
     std::vector<uint32_t> objIndices;
@@ -182,6 +187,14 @@ private:
     void cleanIndexBuffer();
     //</editor-fold>
 
+    VkSampleCountFlagBits getMaxUsableSampleCount();
+
+    void createColorResources();
+
+    void
+    createImage(uint32_t width, uint32_t height, VkSampleCountFlagBits numSamples, VkFormat format,
+                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage &image,
+                VkDeviceMemory &imageMemory);
 };
 
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);

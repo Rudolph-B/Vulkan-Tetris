@@ -40,15 +40,16 @@ std::unordered_map<std::string, std::vector<Vertex>> Svg::getReferenceVertexes()
         path->QueryStringAttribute("d", &d);
         path->QueryStringAttribute("style", &style);
 
-        const std::vector<Vertex> &temp = this->parsePath(d);
-        reference_vertexes[id] = temp;
+        glm::vec3 colour = this->parseStyle(style);
+        reference_vertexes[id] = this->parsePath(d, colour);
+
         path = path->NextSiblingElement();
     } while (path != nullptr);
 
     return reference_vertexes;
 }
 
-std::vector<Vertex> Svg::parsePath(std::string path) {
+std::vector<Vertex> Svg::parsePath(std::string path, glm::vec3 colour) {
     if (path[0] != 'm' || path[path.length() - 1] != 'z') {
         throw std::exception((e_file_invalid + file_name).c_str());
     }
@@ -80,18 +81,31 @@ std::vector<Vertex> Svg::parsePath(std::string path) {
 
     if (std::strcmp(path_methods.c_str(), "mvz") == 0) {
         return {
-                {{p[0] / 400.0,          1 - p[1] / 800.0},                 5, 32},
-                {{(p[0] + p[2]) / 400.0, 1 - (p[3] + p[1]) / 800.0},        5, 32},
-                {{(p[0] + p[2]) / 400.0, 1 - (p[3] + p[1] + p[4]) / 800.0}, 5, 32}
+                {{p[0] / 400.0,          1 - p[1] / 800.0},                 colour},
+                {{(p[0] + p[2]) / 400.0, 1 - (p[3] + p[1]) / 800.0},        colour},
+                {{(p[0] + p[2]) / 400.0, 1 - (p[3] + p[1] + p[4]) / 800.0}, colour}
         };
     } else {
         return {
-                {{p[0] / 400.0,          1 - p[1] / 800.0},                 5, 32},
-                {{p[0] / 400.0,          1 - (p[1] + p[2]) / 800.0},        5, 32},
-                {{(p[0] + p[3]) / 400.0, 1 - (p[1] + p[2] + p[4]) / 800.0}, 5, 32}
+                {{p[0] / 400.0,          1 - p[1] / 800.0},                 colour},
+                {{p[0] / 400.0,          1 - (p[1] + p[2]) / 800.0},        colour},
+                {{(p[0] + p[3]) / 400.0, 1 - (p[1] + p[2] + p[4]) / 800.0}, colour}
         };
     };
 
+}
+
+glm::vec3 Svg::parseStyle(const std::string& style) {
+    // Extract the fill from "fill:#0663ac;paint-order:markers stroke fill"
+    size_t i = style.find("fill:");
+    size_t j = style.find(';', i);
+    std::string fill = style.substr(i + 5, j - i - 5);
+
+    // Convert the hex colour to rgb
+    int r = std::strtol(fill.substr(1, 2).c_str(), nullptr, 16);
+    int g = std::strtol(fill.substr(3, 2).c_str(), nullptr, 16);
+    int b = std::strtol(fill.substr(5, 2).c_str(), nullptr, 16);
+    return {r / 255.0, g / 255.0, b / 255.0};
 }
 
 std::vector<Vertex> Svg::populateDisplayVertexes(std::unordered_map<std::string, std::vector<Vertex>> &refVertexes) {
@@ -161,7 +175,7 @@ std::vector<Vertex> Svg::calcTransformedVertex(std::vector<Vertex> &vector, cons
 
     std::vector<Vertex> dspVertexes;
     for (auto &vertex : vector) {
-        dspVertexes.push_back({{vertex.pos.x + x / 400.0, vertex.pos.y - y / 800.0}, vertex.type, vertex.age});
+        dspVertexes.push_back({{vertex.pos.x + x / 400.0, vertex.pos.y - y / 800.0}, vertex.col});
     }
     return dspVertexes;
 }
