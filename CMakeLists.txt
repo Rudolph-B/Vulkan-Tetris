@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(Vulkan-Tetris main.cpp
         src/window.cpp
-        src/Window.h
+        src/window.h
         src/engine.cpp
         src/engine.h
         src/structs.h
@@ -44,7 +44,11 @@ add_subdirectory(lib/tinyxml2)
 target_link_libraries(${PROJECT_NAME} tinyxml2)
 
 # ---------------------- SHADERS ----------------------
-set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
+if (NOT LINUX)
+    set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
+else()
+    set(GLSL_VALIDATOR "glslangValidator")
+endif()
 
 # Copies the assets to the build directory
 add_custom_target(Assets ALL
