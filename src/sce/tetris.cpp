@@ -210,6 +210,7 @@ Tetris::Tetris() {
 
     newTetrimino();
     clearBoard();
+    started = true;
 }
 
 /**

@@ -91,3 +91,5 @@ add_custom_command(TARGET Vulkan-Tetris POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Vulkan-Tetris>/ass/"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_BINARY_DIR}/ass" "$<TARGET_FILE_DIR:Vulkan-Tetris>/ass"
 )
+
+configure_file(${PROJECT_SOURCE_DIR}/README.md ${PROJECT_BINARY_DIR}/README.md COPYONLY)
