@@ -3,6 +3,7 @@
 #include <exception>
 #include "svg.h"
 #include <string>
+#include <stdexcept>
 
 Svg::Svg(const std::string& file_name): file_name(file_name) {
     tinyxml2::XMLError result;
@@ -10,16 +11,16 @@ Svg::Svg(const std::string& file_name): file_name(file_name) {
 
     result = doc.LoadFile(file_name.c_str());
     if (result != tinyxml2::XML_SUCCESS) {
-        throw std::exception();
+        throw std::runtime_error((e_file_load + file_name).c_str());
     }
 
     svg = doc.FirstChildElement("svg");
     if (svg == nullptr) {
-        throw std::exception();
+        throw std::runtime_error((e_file_invalid + file_name).c_str());
     }
 
     if (svg->FirstChildElement() == nullptr) {
-        throw std::exception();
+        throw std::runtime_error((e_file_invalid + file_name).c_str());
     }
 }
 
@@ -51,7 +52,7 @@ std::unordered_map<std::string, std::vector<Vertex>> Svg::getReferenceVertexes()
 
 std::vector<Vertex> Svg::parsePath(std::string path, glm::vec3 colour) {
     if (path[0] != 'm' || path[path.length() - 1] != 'z') {
-        throw std::exception();
+        throw std::runtime_error((e_file_invalid + file_name).c_str());
     }
 
     int p[5] = {0, 0, 0, 0, 0};
@@ -141,11 +142,11 @@ std::vector<Vertex> Svg::populateDisplayVertexes(std::unordered_map<std::string,
 
 tinyxml2::XMLElement* Svg::getNodeWithId(const char *needle, tinyxml2::XMLElement *source) const {
     if (source == nullptr) {
-        throw std::exception();
+        throw std::runtime_error((e_file_invalid + file_name).c_str());
     }
     source = source->FirstChildElement();
     if (source == nullptr) {
-        throw std::exception();
+        throw std::runtime_error((e_file_invalid + file_name).c_str());
     }
 
     const char *id;
@@ -158,7 +159,7 @@ tinyxml2::XMLElement* Svg::getNodeWithId(const char *needle, tinyxml2::XMLElemen
     } while (source != nullptr);
 
     if (source == nullptr) {
-        throw std::exception();
+        throw std::runtime_error((e_file_invalid + file_name + " failed to find " + needle + " child").c_str());
     }
     return source;
 }
