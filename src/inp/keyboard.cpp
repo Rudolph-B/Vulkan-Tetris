@@ -8,7 +8,9 @@ int Keyboard::eventKeys[KEYBOARD_N_KEYS] = {0};
 
 void Keyboard::keyCallback(GLFWwindow *window, int rawKey, int scancode, int action, int mods) {
     // Log
+#ifndef NDEBUG
     std::cout << "Key: " << rawKey << " Scancode: " << scancode << " Action: " << action << " Mods: " << mods << std::endl;
+#endif
     Keys key = getKeyFromRawKey(rawKey);
 
     if (action == GLFW_PRESS) {
