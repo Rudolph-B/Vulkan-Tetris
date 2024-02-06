@@ -38,9 +38,16 @@ public:
         BLUE = 3,
         YELLOW = 4,
         ORANGE = 5,
-        PURPLE = 6
+        PURPLE = 6,
+        RED_A = 7,
+        GREEN_A = 8,
+        BLUE_A = 9,
+        YELLOW_A = 10,
+        ORANGE_A = 11,
+        PURPLE_A = 12,
     };
-    constexpr static const glm::vec3 Colours[8] = {
+
+    constexpr static const glm::vec3 Colours[15] = {
         {1.0, 1.0, 1.0},
         {1.0, 0.0, 0.0},
         {0.0, 1.0, 0.0},
@@ -48,7 +55,12 @@ public:
         {0.0, 1.0, 1.0},
         {1.0, 0.0, 1.0},
         {1.0, 1.0, 0.0},
-        {1.0, 1.0, 1.0}
+        {0.5, 0.0, 0.0},
+        {0.0, 0.5, 0.0},
+        {0.0, 0.0, 0.5},
+        {0.0, 0.5, 0.5},
+        {0.5, 0.0, 0.5},
+        {0.5, 0.5, 0.0}
     };
 
     // Used to represent the type of tetrimino

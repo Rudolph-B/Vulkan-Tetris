@@ -198,6 +198,27 @@ std::vector<Vertex> Tetris::getVertices() {
         }
     }
 
+    /* PLACE GHOST TETRIMINO */
+    int ghostYOffset = 0;
+    while (canGoHere(0, ghostYOffset)) {
+        ghostYOffset--;
+    }
+    ghostYOffset++;
+
+    if (ghostYOffset != 0) {
+        /* ITERATE OVER GHOST TETRIMINO */
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+
+                /* ADD VERTICES IF BLOCK IS NOT EMPTY */
+                if ((*TETRIMINO_SHAPES[cursorTetrimino])[cursorRotation][x][y]) {
+                    std::vector<Vertex> newVertices = buildVertices(cursorX + x, cursorY + y + ghostYOffset, (Colour)((int)cursorColour + 6), 1);
+                    vertices.insert(std::end(vertices), std::begin(newVertices), std::end(newVertices));
+                }
+            }
+        }
+    }
+
     return vertices;
 }
 
